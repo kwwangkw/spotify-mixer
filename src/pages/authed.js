@@ -31,7 +31,7 @@ export default function AuthPage({ location }) {
                  axios.get("https://api.spotify.com/v1/me/top/tracks").then(res => setTracks(res.data.items[0].name));
                 })
              .catch(error => console.log(error.response))
-    }, [])
+    }, [code])
     return (
         <div>yooo, our token is {token}, your top artist is {artists}, your top track is {tracks}</div>
     )

@@ -19,6 +19,7 @@
     "axios": "^0.21.1",
     "base64url": "^3.0.1",
     "crypto-random-string": "^3.3.0",
+    "firebase": "^8.2.1",
     "gatsby": "^2.26.1",
     "gatsby-image": "^2.8.0",
     "gatsby-plugin-react-helmet": "^3.7.0",
