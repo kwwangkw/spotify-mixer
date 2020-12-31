@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import cryptoRandomString from "crypto-random-string"
-import { encode as base64encode } from "base64-arraybuffer";
+import { generateCodeChallenge } from "../utils/auth"
+import { accountsAuthorizeURI } from "../utils/constants"
 
 // styles
 const pageStyles = {
@@ -98,31 +99,14 @@ const links = [
   },
 ]
 
-export const redirect_uri = "http://localhost:8000/authed"
 export const codeVerifier = "h4wfhQbFXvFa845IX61lcmJ3oX6QeYvUbaWMNElrKPFbJXF9js";
-async function generateCodeChallenge(codeVerifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", data);
-  const base64Digest = base64encode(digest);
-  // you can extract this replacing code to a function
-  return base64Digest
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-}
+
 // markup
 const IndexPage = () => {
-  const client_id = "77a66019aa004d18a9e146886cfe6b62";
   const [code_challenge, set_code_challenge] = useState("");
   useEffect(() => {
-    async function hashStuff() {
-      const code_challenge = await generateCodeChallenge(codeVerifier);
-      console.log(code_challenge);
-      set_code_challenge(code_challenge);
-    }
-
-    hashStuff()
+    generateCodeChallenge(codeVerifier)
+      .then(code_challenge => set_code_challenge(code_challenge))
   }, [])
   return (
     <main style={pageStyles}>
@@ -169,7 +153,16 @@ const IndexPage = () => {
         alt="Gatsby G Logo"
         src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
       />
-      <a href={`https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user-top-read&code_challenge=${code_challenge}&code_challenge_method=S256`}> Login to Spotify </a>
+      <a href={
+        `${accountsAuthorizeURI}`+
+        `?response_type=code`+ 
+        `&client_id=${process.env.CLIENT_ID}`+
+        `&redirect_uri=${process.env.REDIRECT_URI}`+
+        `&scope=user-top-read`+
+        `&state=${cryptoRandomString({length: 10})}`+
+        `&code_challenge=${code_challenge}`+
+        `&code_challenge_method=S256`
+      }>Login to Spotify</a>
     </main>
   )
 }
