@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import * as queryString from "query-string"
 import qs from "querystring"
 import axios from "axios"
+import firebaseInst from "../firebase"
 import  { codeVerifier } from "./index"
 import { accountsApiTokenURI } from "../utils/constants"
 
@@ -10,6 +11,7 @@ export default function AuthPage({ location }) {
     const [token, setToken] = useState("");
     const [artists, setArtists] = useState("")
     const [tracks, setTracks] = useState("")
+    const db = firebaseInst.firestore()
     useEffect(() => {
         const requestBody = {
             client_id: process.env.CLIENT_ID,
@@ -25,7 +27,11 @@ export default function AuthPage({ location }) {
         }
         axios.post(accountsApiTokenURI, qs.stringify(requestBody), config)
              .then(res => { 
-                 setToken(res.data.access_token) 
+                 setToken(res.data.access_token)
+                 db.collection("users").doc("kevinID").set({
+                     curr_token: res.data.access_token,
+                     refresh_token: res.data.refresh_token,
+                 })
                  axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.access_token}`}
                  axios.get("https://api.spotify.com/v1/me/top/artists").then(res => setArtists(res.data.items[0].name));
                  axios.get("https://api.spotify.com/v1/me/top/tracks").then(res => setTracks(res.data.items[0].name));
