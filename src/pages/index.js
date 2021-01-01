@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react"
-import cryptoRandomString from "crypto-random-string"
-import { generateCodeChallenge } from "../utils/auth"
-import { accountsAuthorizeURI } from "../utils/constants"
+import React from "react"
+import { Link } from "gatsby"
+
 
 // styles
 const pageStyles = {
@@ -99,15 +98,9 @@ const links = [
   },
 ]
 
-export const codeVerifier = "h4wfhQbFXvFa845IX61lcmJ3oX6QeYvUbaWMNElrKPFbJXF9js";
 
 // markup
 const IndexPage = () => {
-  const [code_challenge, set_code_challenge] = useState("");
-  useEffect(() => {
-    generateCodeChallenge(codeVerifier)
-      .then(code_challenge => set_code_challenge(code_challenge))
-  }, [])
   return (
     <main style={pageStyles}>
       <title>Home Page</title>
@@ -154,16 +147,7 @@ const IndexPage = () => {
         src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
       />
       <br/>
-      <a href={
-        `${accountsAuthorizeURI}`+
-        `?response_type=code`+ 
-        `&client_id=${process.env.CLIENT_ID}`+
-        `&redirect_uri=${process.env.REDIRECT_URI}`+
-        `&scope=user-top-read playlist-modify-public playlist-modify-private`+
-        `&state=${cryptoRandomString({length: 10})}`+
-        `&code_challenge=${code_challenge}`+
-        `&code_challenge_method=S256`
-      }>Login to Spotify</a>
+      <Link to="/app/home">App Home</Link>
     </main>
   )
 }

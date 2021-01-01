@@ -15,4 +15,10 @@ async function generateCodeChallenge(codeVerifier) {
   return makeUrlSafe(base64Digest);
 }
 
+// function isLoggedIn() {
+//   console.log('isLoggedIn')
+//   const user = firebaseInst.auth().currentUser;
+//   return user !== null;
+// }
+
 export { generateCodeChallenge }
