@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
 import firebaseInst from "../firebase"
 
 export default function Home({ user }) {
-    console.log("HOOOMMMEEEEE")
     const [token, setToken] = useState("")
     useEffect(() => {
         if (!user) {
