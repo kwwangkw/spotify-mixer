@@ -1,11 +1,9 @@
 import React, { useEffect } from "react"
 import * as queryString from "query-string"
 import { navigate } from "gatsby"
-import qs from "querystring"
 import axios from "axios"
 import firebaseInst from "../firebase"
-import { codeVerifier } from "../utils/constants"
-import { accountsApiTokenURI, profileURI } from "../utils/constants"
+import { profileURI } from "../utils/constants"
 
 export default function AuthPage({ location }) {
     console.log("in TMP REDIRECT AUTH PAGE")
@@ -29,19 +27,7 @@ export default function AuthPage({ location }) {
             }
         }
         async function loginWithSpotify() {
-            const requestBody = {
-                client_id: process.env.CLIENT_ID,
-                grant_type: "authorization_code",
-                code: code,
-                redirect_uri: process.env.REDIRECT_URI,
-                code_verifier: codeVerifier
-            }
-            const config = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }
-            const res = await axios.post(accountsApiTokenURI, qs.stringify(requestBody), config)
+            const res = await axios.post(`${process.env.SERVER_URI}/spotify/token`, { code: code })
             const [ accessToken, refreshToken ] = [ res.data.access_token, res.data.refresh_token ]
             axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.access_token}`}
             return getFirebaseToken(accessToken, refreshToken)
