@@ -16,14 +16,14 @@ function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
         })
 }
 
-async function safeAPI(user, func, refreshToken, expireTime) {
+async function safeAPI(uid, func, refreshToken, expireTime) {
     const currTime = new Date().getTime() / 1000
     const buffer = 10
     if (currTime + buffer >= expireTime) {
         const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
         const accessToken = resp.data.access_token
         axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
-        setUserTokens(user.uid, accessToken, refreshToken, resp.data.expires_in)
+        setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
     }
     return func()
 }
