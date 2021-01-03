@@ -16,5 +16,8 @@ var firebaseConfig = {
   export default !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
+
+  export const FieldValue = firebase.firestore.FieldValue;
+  export const FieldPath = firebase.firestore.FieldPath;
   
   firebase.analytics();

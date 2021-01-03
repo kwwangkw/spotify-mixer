@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import firebaseInst from "../firebase"
-import { usersCollection } from "../utils/constants"
-import { createAndFillPlaylist } from "../utils/data"
+import { groupsCollection, usersCollection } from "../utils/constants"
+import { createAndFillPlaylist, joinGroup, checkIsInGroup } from "../utils/data"
 import { safeAPI } from "../utils/auth"
 import { useScrollRestoration } from "gatsby"
 
 export default function Home({ user }) {
+    const groupId = "IYMcWpozvPVtGglzUwwN"
+
     const [token, setToken] = useState("")
     const [refreshToken, setRefreshToken] = useState("")
     const [expireTime, setExpireTime] = useState(0)
     const [artists, setArtists] = useState("")
+    const [isInGroup, setIsInGroup] = useState(true)
+
     useEffect(() => {
         if (!user) {
             return
@@ -31,6 +35,10 @@ export default function Home({ user }) {
                 console.log("user does not exist")
             }
         }).then((data) => safeAPI(user.uid, getFavArtist, data.refresh_token, data.expire_time))
+
+        checkIsInGroup(user, groupId).then(val => {
+            setIsInGroup(val)
+        })
     }, [])
 
     return (
@@ -39,11 +47,20 @@ export default function Home({ user }) {
             <button
                 className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
                 onClick={() => {
-                    createAndFillPlaylist(user, "IYMcWpozvPVtGglzUwwN", refreshToken, expireTime)
+                    createAndFillPlaylist(user, groupId, refreshToken, expireTime)
                 }}
                 disabled={refreshToken === "" || expireTime === 0}
             >
                 Generate Playlist
+            </button>
+            <button
+                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+                onClick={() => {
+                    joinGroup(user, groupId)
+                }}
+                disabled={isInGroup}
+            >
+                Join Group
             </button>
         </div>
     )

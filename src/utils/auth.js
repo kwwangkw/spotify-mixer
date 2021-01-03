@@ -16,15 +16,16 @@ function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
         })
 }
 
+// TODO: add option to repull user data for you if you want
 async function safeAPI(uid, func, refreshToken, expireTime) {
     const currTime = new Date().getTime() / 1000
     const buffer = 10
-    if (currTime + buffer >= expireTime) {
-        const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
-        const accessToken = resp.data.access_token
-        axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
-        setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
-    }
+    // if (currTime + buffer >= expireTime) {
+    const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
+    const accessToken = resp.data.access_token
+    axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
+    setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
+    // }
     return func()
 }
 
