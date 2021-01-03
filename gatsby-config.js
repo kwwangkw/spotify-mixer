@@ -3,6 +3,7 @@ module.exports = {
     title: "spotify-mixer",
   },
   plugins: [
+    "gatsby-plugin-postcss",
     "gatsby-plugin-sharp",
     "gatsby-plugin-react-helmet",
     "gatsby-transformer-sharp",
