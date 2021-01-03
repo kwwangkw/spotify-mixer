@@ -1,8 +1,21 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    backgroundColor: theme => ({
+      ...theme('colors'),
+    }),
+    textColor: theme => ({
+      ...theme('colors'),
+    }),
+    extend: {
+      colors: {
+        "spotify-gray": '#222326',
+        "primary": colors.emerald,
+      }
+    },
   },
   variants: {
     extend: {},

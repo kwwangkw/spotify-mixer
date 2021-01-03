@@ -102,7 +102,7 @@ const links = [
 // markup
 const IndexPage = () => {
   return (
-    <main style={pageStyles}>
+    <main style={pageStyles} className="bg-spotify-gray">
       <title>Home Page</title>
       <h1 style={headingStyles}>
         Congratulations
