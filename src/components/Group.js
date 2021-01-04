@@ -5,7 +5,7 @@ import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 import { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
-import { useScrollRestoration } from "gatsby"
+import { navigate, useScrollRestoration } from "gatsby"
 
 export default function Group({ user, groupId }) {
     const [token, setToken] = useState("")
@@ -71,7 +71,11 @@ export default function Group({ user, groupId }) {
             <div>
                 <button
                     className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => joinGroup(user, groupId)}
+                    onClick={() => {
+                        joinGroup(user, groupId).then(() => {
+                            window.location.reload()
+                        })
+                    }}
                     disabled={isInGroup}
                 >
                     Join Group
@@ -103,9 +107,19 @@ export default function Group({ user, groupId }) {
                 Playlist Link: {playlistLink}
             </div>
             <div>
+                Share link: {window.location.href}
+            </div>
+            <div>
                 <p>Group Members:</p>
                 {groupMembers.map(member => <p key={member}>{member}</p>)}
             </div>
+            <button
+                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+            >
+                <a href={"/app/home"}>
+                    Cancel
+                </a>
+            </button>
         </div>
     )
 }

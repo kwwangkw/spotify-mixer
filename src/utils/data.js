@@ -83,11 +83,9 @@ async function checkIsInGroup(user, groupId) {
 }
 
 async function joinGroup(user, groupId) {
-    console.log("joinGroup")
     const db = firebaseInst.firestore()
     const ref = db.collection(groupsCollection).doc(groupId)
-    console.log(user);
-    ref.update("users", FieldValue.arrayUnion(user.uid));
+    return ref.update("users", FieldValue.arrayUnion(user.uid));
 }
 
 async function createGroup(user, groupName) {

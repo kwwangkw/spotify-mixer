@@ -51,6 +51,11 @@ export default function Home({ user }) {
                 <p>Groups:</p>
                 {groups.map(group => <a key={group.id} href={`${process.env.BASE_URI}/app/group/${group.id}`}>{group.name}</a>)}
             </div>
+            <button>
+                <a href="/app/newg">
+                    New Group
+                </a>
+            </button>
             <button
                 className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
                 onClick={signOut}
