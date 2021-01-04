@@ -16,11 +16,11 @@ export default function Group({ user, groupId }) {
     const [token, setToken] = useState("")
     const [refreshToken, setRefreshToken] = useState("")
     const [expireTime, setExpireTime] = useState(0)
-    const [artists, setArtists] = useState("")
     const [isInGroup, setIsInGroup] = useState(null)
     const [groupName, setGroupName] = useState("")
     const [playlistLink, setPlaylistLink] = useState("")
     const [groupMembers, setGroupMembers] = useState([])
+    const [nullMessage, setNullMessage] = useState("Loading...")
 
     useEffect(() => {
         async function func() {
@@ -42,16 +42,23 @@ export default function Group({ user, groupId }) {
             })
 
             checkIsInGroup(user, groupId).then(val => {
-                setIsInGroup(val)
+                if (val !== null) {
+                    setIsInGroup(val)
+                }
+                else {
+                    setNullMessage("Invalid groupId")
+                }
             })
 
             const group = await getGroup(groupId)
-            setGroupName(group.name)
-            setGroupMembers(group.users)
-            if (group.playlist_id) {
-                // const playlist = await getPlaylist(user, group.playlist_id)
-                // setPlaylistLink(playlist.external_urls.spotify)
-                setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
+            if (group) {
+                setGroupName(group.name)
+                setGroupMembers(group.users)
+                if (group.playlist_id) {
+                    // const playlist = await getPlaylist(user, group.playlist_id)
+                    // setPlaylistLink(playlist.external_urls.spotify)
+                    setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
+                }
             }
         }
         func()
@@ -60,7 +67,7 @@ export default function Group({ user, groupId }) {
     if (isInGroup === null) {
         return (
             <div>
-                Loading...
+                {nullMessage}
             </div>
         )
     }

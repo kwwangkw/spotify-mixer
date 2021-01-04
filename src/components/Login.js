@@ -4,7 +4,7 @@ import { accountsAuthorizeURI } from "../utils/constants"
 
 export default function Login() {
     return (
-        <div class="bg-dark-gray text-primary-400 w-full h-screen">
+        <div className="bg-dark-gray text-primary-400 w-full h-screen">
             <div className="w-full h-full flex flex-col justify-center text-center items-center">
                 <h1 className="text-5xl font-bold mb-2">Spotify<span className="text-white font-extralight">Mixer</span></h1>
                 <h2 className="text-2xl mb-7 text-gray-400 font-extralight">Create playlists with friends.</h2>

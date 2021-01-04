@@ -65,12 +65,21 @@ async function getPlaylist(user, playlistId) {
 }
 
 async function checkIsInGroup(user, groupId) {
+    console.log(groupId)
     const db = firebaseInst.firestore()
-    const ref = db.collection(groupsCollection)
-    const snapshot = await ref.where(FieldPath.documentId(), "==", groupId)
-                        .where("users", "array-contains", user.uid)
-                        .get()
-    return !snapshot.empty
+    const ref = db.collection(groupsCollection).doc(groupId)
+    const doc = await ref.get()
+    if (!doc.exists) {
+        return null
+    }
+
+    const users = doc.data().users
+    for (const uid of users) {
+        if (uid === user.uid) {
+            return true
+        }
+    }
+    return false
 }
 
 async function joinGroup(user, groupId) {
@@ -89,7 +98,7 @@ async function createGroup(user, groupName) {
         users: [user.uid],
     })
     db.collection(usersCollection).doc(user.uid).update("groups", FieldValue.arrayUnion(docRef.id))
-    return `http://localhost:8000/app/group/${docRef.id}`
+    return `${process.env.BASE_URI}/app/group/${docRef.id}`
 }
 
 async function getGroup(groupId) {
@@ -98,4 +107,19 @@ async function getGroup(groupId) {
     return docSnapshot.data()
 }
 
-export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup }
+async function getUserGroups(uid) {
+    const db = firebaseInst.firestore()
+    const docSnapshot = await db.collection(usersCollection).doc(uid).get()
+    const groups = docSnapshot.data().groups
+
+    let userGroups = []
+    for (const groupId of groups) {
+        const groupSnapshot = await db.collection(groupsCollection).doc(groupId).get()
+        let group = groupSnapshot.data()
+        group.id = groupSnapshot.id
+        userGroups.push(group)
+    }
+    return userGroups
+}
+
+export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }
