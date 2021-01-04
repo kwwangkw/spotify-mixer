@@ -3,7 +3,7 @@ import * as queryString from "query-string"
 import { navigate } from "gatsby"
 import axios from "axios"
 import firebaseInst from "../firebase"
-import { setUserTokens } from "../utils/auth"
+import { setUserTokens, setAxiosTokenHeader } from "../utils/auth"
 import { profileURI } from "../utils/constants"
 
 export default function AuthPage({ location }) {
@@ -23,7 +23,7 @@ export default function AuthPage({ location }) {
         async function loginWithSpotify() {
             const res = await axios.post(`${process.env.SERVER_URI}/spotify/token`, { code: code })
             const [ accessToken, refreshToken, expiresIn ] = [ res.data.access_token, res.data.refresh_token, res.data.expires_in ]
-            axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
+            setAxiosTokenHeader(accessToken)
             const user = await getFirebaseToken()
             return setUserTokens(user.user.uid, accessToken, refreshToken, expiresIn)
         }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import firebaseInst from "../firebase"
+import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 import { createAndFillPlaylist, joinGroup, checkIsInGroup } from "../utils/data"
 import { safeAPI } from "../utils/auth"
@@ -14,6 +15,7 @@ export default function Home({ user }) {
     const [expireTime, setExpireTime] = useState(0)
     const [artists, setArtists] = useState("")
     const [isInGroup, setIsInGroup] = useState(true)
+    const [playlistLink, setPlaylistLink] = useState("")
 
     useEffect(() => {
         if (!user) {
@@ -26,7 +28,7 @@ export default function Home({ user }) {
         db.collection(usersCollection).doc(user.uid).get().then(doc => {
             if (doc.exists) {
                 const data = doc.data()
-                axios.defaults.headers.common = {'Authorization': `Bearer ${data.curr_token}`}
+                setAxiosTokenHeader(data.curr_token)
                 setToken(data.curr_token)
                 setRefreshToken(data.refresh_token)
                 setExpireTime(data.expire_time)
@@ -34,7 +36,7 @@ export default function Home({ user }) {
             } else {
                 console.log("user does not exist")
             }
-        }).then((data) => safeAPI(user.uid, getFavArtist, data.refresh_token, data.expire_time))
+        }).then((data) => safeAPI(user.uid, getFavArtist))
 
         checkIsInGroup(user, groupId).then(val => {
             setIsInGroup(val)
@@ -46,8 +48,9 @@ export default function Home({ user }) {
             <div>Your tokens are {token}, {refreshToken}. Artist: {artists}</div>
             <button
                 className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                onClick={() => {
-                    createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                onClick={async () => {
+                    const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                    setPlaylistLink(playlist.external_urls.spotify)
                 }}
                 disabled={refreshToken === "" || expireTime === 0}
             >
@@ -62,6 +65,9 @@ export default function Home({ user }) {
             >
                 Join Group
             </button>
+            <div>
+                {playlistLink}
+            </div>
         </div>
     )
 }

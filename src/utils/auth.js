@@ -5,8 +5,6 @@ import { usersCollection } from "../utils/constants"
 function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
     const db = firebaseInst.firestore()
     const secondsSince1970 = new Date().getTime() / 1000
-    console.log(secondsSince1970)
-    console.log(expireSeconds)
     db.collection(usersCollection)
         .doc(uid)
         .set({ 
@@ -16,17 +14,36 @@ function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
         })
 }
 
-// TODO: add option to repull user data for you if you want
-async function safeAPI(uid, func, refreshToken, expireTime) {
-    const currTime = new Date().getTime() / 1000
-    const buffer = 10
-    // if (currTime + buffer >= expireTime) {
+function setAxiosTokenHeader(accessToken) {
+    axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
+}
+
+async function getNewAccessToken(uid, refreshToken) {
     const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
     const accessToken = resp.data.access_token
-    axios.defaults.headers.common = {'Authorization': `Bearer ${accessToken}`}
+    setAxiosTokenHeader(accessToken)
     setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
-    // }
+}
+
+async function getUserData(uid) {
+    const db = firebaseInst.firestore()
+    const userRef = db.collection(usersCollection).doc(uid)
+    const userDoc = await userRef.get()
+    return userDoc.data()
+}
+
+async function safeAPI(uid, func) {
+    const currTime = new Date().getTime() / 1000
+    const buffer = 10
+    const userData = await getUserData(uid)
+    setAxiosTokenHeader(userData.curr_token)
+    const refreshToken = userData.refresh_token
+    const expireTime = userData.expire_time
+    if (currTime + buffer >= expireTime) {
+        getNewAccessToken(uid, refreshToken)
+    }
     return func()
 }
 
-export { setUserTokens, safeAPI }
+
+export { setUserTokens, safeAPI, setAxiosTokenHeader }
