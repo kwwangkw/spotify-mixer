@@ -1,4 +1,5 @@
 import axios from "axios"
+import { async } from "crypto-random-string"
 import firebaseInst, { FieldValue, FieldPath } from "../firebase"
 import { safeAPI } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
@@ -49,7 +50,18 @@ async function createAndFillPlaylist(user, groupID) {
         user.uid,
         () => axios.post(`https://api.spotify.com/v1/playlists/${playlist.data.id}/tracks`, requestBody),
     )
+
+    ref.update("playlist_id", playlist.data.id)
+
     return playlist.data
+}
+
+async function getPlaylist(user, playlistId) {
+    const playlist = await safeAPI(
+        user.uid,
+        () => axios.post(`https://api.spotify.com/v1/playlists/${playlistId}`)
+    )
+    return playlist
 }
 
 async function checkIsInGroup(user, groupId) {
@@ -80,4 +92,10 @@ async function createGroup(user, groupName) {
     return `http://localhost:8000/app/group/${docRef.id}`
 }
 
-export { createAndFillPlaylist, joinGroup, checkIsInGroup, createGroup }
+async function getGroup(groupId) {
+    const db = firebaseInst.firestore()
+    const docSnapshot = await db.collection(groupsCollection).doc(groupId).get()
+    return docSnapshot.data()
+}
+
+export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup }
