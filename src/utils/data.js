@@ -35,7 +35,7 @@ async function createAndFillPlaylist(user, groupID) {
     }
 
     let requestBody = {
-        name: "Coolio Richard Broolio Playlist",
+        name: "The newest coolest playlist",
         public: false,
         collaborative: true,
     }
@@ -109,17 +109,23 @@ async function getGroup(groupId) {
 
 async function getUserGroups(uid) {
     const db = firebaseInst.firestore()
-    const docSnapshot = await db.collection(usersCollection).doc(uid).get()
-    const groups = docSnapshot.data().groups
-
+    const docSnapshot = await db.collection(groupsCollection).where("users", "array-contains", uid).get()
     let userGroups = []
-    for (const groupId of groups) {
-        const groupSnapshot = await db.collection(groupsCollection).doc(groupId).get()
-        let group = groupSnapshot.data()
-        group.id = groupSnapshot.id
-        userGroups.push(group)
-    }
+    docSnapshot.forEach(doc => {
+        const docWithID = doc.data()
+        docWithID.id = doc.id
+        userGroups.push(docWithID)
+    })
     return userGroups
+    
+    // let userGroups = []
+    // for (const groupId of groups) {
+    //     const groupSnapshot = await db.collection(groupsCollection).doc(groupId).get()
+    //     let group = groupSnapshot.data()
+    //     group.id = groupSnapshot.id
+    //     userGroups.push(group)
+    // }
+    // return userGroups
 }
 
 export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }

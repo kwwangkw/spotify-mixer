@@ -8,11 +8,6 @@ import { safeAPI, signOut } from "../utils/auth"
 import { useScrollRestoration } from "gatsby"
 
 export default function Group({ user, groupId }) {
-    // const groupId = "IYMcWpozvPVtGglzUwwN"
-    user = {
-        uid: "2163uqgrf37toi7cq2abcwlri"
-    }
-
     const [token, setToken] = useState("")
     const [refreshToken, setRefreshToken] = useState("")
     const [expireTime, setExpireTime] = useState(0)

@@ -5,12 +5,12 @@ import { usersCollection } from "../utils/constants"
 function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
     const db = firebaseInst.firestore()
     const secondsSince1970 = new Date().getTime() / 1000
-    db.collection(usersCollection)
+    return db.collection(usersCollection)
         .doc(uid)
         .set({ 
             curr_token: accessToken, 
             refresh_token: refreshToken, 
-            expire_time: secondsSince1970 + expireSeconds
+            expire_time: secondsSince1970 + expireSeconds,
         }, {merge: true})
 }
 
@@ -22,7 +22,7 @@ async function getNewAccessToken(uid, refreshToken) {
     const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
     const accessToken = resp.data.access_token
     setAxiosTokenHeader(accessToken)
-    setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
+    return setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
 }
 
 async function getUserData(uid) {
@@ -40,7 +40,7 @@ async function safeAPI(uid, func) {
     const refreshToken = userData.refresh_token
     const expireTime = userData.expire_time
     if (currTime + buffer >= expireTime) {
-        getNewAccessToken(uid, refreshToken)
+        await getNewAccessToken(uid, refreshToken)
     }
     return func()
 }
