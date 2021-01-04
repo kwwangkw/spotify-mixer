@@ -1,7 +1,7 @@
 import axios from "axios"
 import firebaseInst, { FieldValue, FieldPath } from "../firebase"
 import { safeAPI } from "../utils/auth"
-import { groupsCollection } from "../utils/constants"
+import { groupsCollection, usersCollection } from "../utils/constants"
 
 async function createAndFillPlaylist(user, groupID) {
     const db = firebaseInst.firestore()
@@ -69,4 +69,15 @@ async function joinGroup(user, groupId) {
     ref.update("users", FieldValue.arrayUnion(user.uid));
 }
 
-export { createAndFillPlaylist, joinGroup, checkIsInGroup }
+async function createGroup(user, groupName) {
+    const db = firebaseInst.firestore()
+    const docRef = await db.collection(groupsCollection).add({
+        name: groupName,
+        playlist_id: "",
+        users: [user.uid],
+    })
+    db.collection(usersCollection).doc(user.uid).update("groups", FieldValue.arrayUnion(docRef.id))
+    return `http://localhost:8000/app/group/${docRef.id}`
+}
+
+export { createAndFillPlaylist, joinGroup, checkIsInGroup, createGroup }
