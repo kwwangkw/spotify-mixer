@@ -4,7 +4,7 @@ import firebaseInst from "../firebase"
 import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 import { createAndFillPlaylist, joinGroup, checkIsInGroup } from "../utils/data"
-import { safeAPI } from "../utils/auth"
+import { safeAPI, signOut } from "../utils/auth"
 import { useScrollRestoration } from "gatsby"
 
 export default function Home({ user }) {
@@ -68,6 +68,12 @@ export default function Home({ user }) {
             <div>
                 {playlistLink}
             </div>
+            <button
+                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+                onClick={signOut}
+            >
+                Log Out
+            </button>
         </div>
     )
 }

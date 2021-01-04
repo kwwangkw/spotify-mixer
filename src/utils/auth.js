@@ -45,5 +45,13 @@ async function safeAPI(uid, func) {
     return func()
 }
 
+async function signOut() {
+    try {
+        firebaseInst.auth().signOut()
+    } catch (error) {
+        console.error(error)
+    }
+}
 
-export { setUserTokens, safeAPI, setAxiosTokenHeader }
+
+export { setUserTokens, safeAPI, setAxiosTokenHeader, signOut }
