@@ -50,18 +50,19 @@ export default function Group({ user, groupId }) {
     const [groupName, setGroupName] = useState("")
     const [playlistLink, setPlaylistLink] = useState("")
     const [groupMembers, setGroupMembers] = useState([])
+    const [isCopied, setIsCopied] = useState(false)
     const [nullMessage, setNullMessage] = useState("Loading...")
 
 
     function copyToClipboard(){
-        var dummy = document.createElement('input'),
+        var temp = document.createElement('input'),
         text = window.location.href;
 
-        document.body.appendChild(dummy);
-        dummy.value = text;
-        dummy.select();
+        document.body.appendChild(temp);
+        temp.value = text;
+        temp.select();
         document.execCommand('copy');
-        document.body.removeChild(dummy);
+        document.body.removeChild(temp);
     }
 
     useEffect(() => {
@@ -152,7 +153,10 @@ export default function Group({ user, groupId }) {
                     <div className="flex flex-row">
                         <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
                         <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
-                                onClick={() => copyToClipboard()}
+                                onClick={() => {
+                                    copyToClipboard()
+                                    setIsCopied(true)
+                                }}
                         >
                                 <svg 
                                     className="ml-3 h-5 w-5 text-white-500"
@@ -166,7 +170,8 @@ export default function Group({ user, groupId }) {
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />  
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                                 </svg>
-                            <span class="absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible" style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
+                            <span className={`${ !isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
+                            <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
                         </button>
                     </div>
                     <div className="text-gray-400 text-lg mb-12">
