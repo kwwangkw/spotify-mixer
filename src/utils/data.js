@@ -1,6 +1,5 @@
 import axios from "axios"
-import { async } from "crypto-random-string"
-import firebaseInst, { FieldValue, FieldPath } from "../firebase"
+import firebaseInst, { FieldValue } from "../firebase"
 import { safeAPI } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 
@@ -115,15 +114,6 @@ async function getUserGroups(uid) {
         userGroups.push(docWithID)
     })
     return userGroups
-    
-    // let userGroups = []
-    // for (const groupId of groups) {
-    //     const groupSnapshot = await db.collection(groupsCollection).doc(groupId).get()
-    //     let group = groupSnapshot.data()
-    //     group.id = groupSnapshot.id
-    //     userGroups.push(group)
-    // }
-    // return userGroups
 }
 
 export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }
