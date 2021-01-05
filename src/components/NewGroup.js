@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { createGroup } from "../utils/data"
 
 export default function NewGroup({ user }) {
-    const [groupName, setGroupName] = useState("Your Group's Name")
+    const [groupName, setGroupName] = useState("Untitled Group")
     const [shareLink, setShareLink] = useState("")
     const [isClipboardToastVisible, setIsClipboardToastVisible] = useState(false)
 
@@ -22,35 +22,43 @@ export default function NewGroup({ user }) {
     return (
         <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
             <div className="w-full h-full flex flex-col justify-center text-center items-center">
-                <div className="border-2 border-gray-400 rounded-3xl pb-16 pt-20 px-24">
-                    <h1 className="text-white text-5xl mb-7 font-bold">Create Group</h1>
+                <div className="border-2 border-transparent rounded-3xl pb-16 pt-20 px-24">
+                    <h1 className="text-primary-400 font-semi-bold text-5xl mb-16">Start Exploring: <span className="text-white font-thin text-5xl mb-10">Create a Group</span></h1>
                     <input 
-                        className="text-3xl mb-6 bg-transparent text-white font-extralight text-center outline-none overflow-visible border-b border-white" 
+                        className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
                         placeholder="Your Group's Name" 
                         //style={{'caretColor': 'transparent'}}
-                        //style={{'text-align': 'left'}}
-                        value={groupName}
-                        onChange={e => setGroupName(e.target.value)}
+                        //value={groupName}
+                        onChange={e => 
+                            setGroupName(e.target.value)
+                        }
                     />
-                    <button 
-                        className="mx-auto text-white font-light bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3"
-                        onClick={async () => {
-                            const val = await createGroup(user, groupName)
-                            setShareLink(val)
-                        }}
-                    >
-                        Generate Share Link
-                    </button>
-                    <button className="mx-auto py-1 text-white font-light bg-red-500 text-xl text-center rounded-full px-5 flex flex-row mb-3">
-                        <a
-                            href={"/app/home"}
+                    <div className="flex flex-row">
+                        <button 
+                            className="ml-auto mr-1 text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3"
+                            style={{'outline': 'none'}}
+                            onClick={async () => {
+                                const val = await createGroup(user, groupName)
+                                setShareLink(val)
+                            }}
                         >
-                            Close
-                        </a>
-                    </button>
-                    {shareLink !== "" ? (
+                            Generate Invite Link
+                        </button>
+                        <button 
+                            style={{'outline': 'none'}}
+                            className="mr-auto ml-1 py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3"
+                        >
+                            <a
+                                href={"/app/home"}
+                            >
+                                Cancel
+                            </a>
+                        </button>
+                    </div>
+                    {/*
+                        {shareLink !== "" ? (
                         <>
-                            <div className="border border-transparent rounded-md p-2">
+                            <div className="border border-transparent rounded-md p-2 text-gray-400 font-light">
                                 {shareLink}
                                 <button onClick={() => copyToClipboard()}>
                                     <svg 
@@ -69,11 +77,13 @@ export default function NewGroup({ user }) {
                             </div>
                             <p 
                                 style={{visibility: isClipboardToastVisible ? "visible" : "hidden"}}
+                                className="text-gray-400 font-light"
                             >
-                                Copied share link to clipboard
+                                Copied invite link to clipboard
                             </p>
                         </>
                     ): null}
+                    */}
                 </div>
             </div>
         </div>
