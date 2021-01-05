@@ -177,7 +177,7 @@ export default function Group({ user, groupId }) {
                     <div className="text-gray-400 text-lg mb-12">
                         <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
                     </div>
-                    <h2 className="text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
+                    <h2 className="border-2 border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
