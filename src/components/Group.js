@@ -182,7 +182,7 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
-                            const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                            const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
                             setPlaylistLink(playlist.external_urls.spotify)
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
@@ -210,7 +210,7 @@ export default function Group({ user, groupId }) {
                     style={{'outline': 'none'}}
                     className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                     onClick={async () => {
-                        const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                        const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
                         setPlaylistLink(playlist.external_urls.spotify)
                     }}
                     disabled={refreshToken === "" || expireTime === 0}

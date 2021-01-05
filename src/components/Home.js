@@ -24,7 +24,7 @@ export default function Home({ user }) {
             <div>Your fav artist: {artists}</div>
             <div>
                 <p>Groups:</p>
-                {groups.map(group => <div><a key={group.id} href={`${process.env.BASE_URI}/app/group/${group.id}`}>{group.name}</a></div>)}
+                {groups.map(group => <div key={group.id}><a href={`${process.env.BASE_URI}/app/group/${group.id}`}>{group.name}</a></div>)}
             </div>
             <button>
                 <a href="/app/newg">
