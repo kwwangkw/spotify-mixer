@@ -63,7 +63,7 @@ async function createAndFillPlaylist(user, groupID, name, timeRange, limitPerPer
 async function getPlaylist(user, playlistId) {
     const playlist = await safeAPI(
         user.uid,
-        () => axios.post(`https://api.spotify.com/v1/playlists/${playlistId}`)
+        () => axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`)
     )
     return playlist
 }

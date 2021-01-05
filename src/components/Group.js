@@ -52,6 +52,7 @@ export default function Group({ user, groupId }) {
     const [groupMembers, setGroupMembers] = useState([])
     const [isCopied, setIsCopied] = useState(false)
     const [nullMessage, setNullMessage] = useState("Loading...")
+    const [playlistTracks, setPlaylistTracks] = useState([])
 
 
     function copyToClipboard(){
@@ -63,6 +64,28 @@ export default function Group({ user, groupId }) {
         temp.select();
         document.execCommand('copy');
         document.body.removeChild(temp);
+    }
+
+    function parseTracks(tracksIn){
+        let tracks = []
+        for(let index = 0; index < tracksIn.items.length; index++){
+            let trackInfo = tracksIn.items[index].track
+            let currentTrack = {
+                name: trackInfo.name,
+                artists: [],
+                image_url: trackInfo.album.images[0].url,
+                album_name: "",
+            }
+            if (trackInfo.album.album_type === 'album') {
+                currentTrack.album_name = trackInfo.album.name
+            }
+
+            for(let nArtist = 0; nArtist < trackInfo.artists.length; nArtist++){
+                currentTrack.artists.push(trackInfo.artists[nArtist].name)
+            }
+            tracks.push(currentTrack)
+        }
+        setPlaylistTracks(tracks)
     }
 
     useEffect(() => {
@@ -101,12 +124,21 @@ export default function Group({ user, groupId }) {
                     // const playlist = await getPlaylist(user, group.playlist_id)
                     // setPlaylistLink(playlist.external_urls.spotify)
                     setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
+                    console.log(group.playlist_id)
+                    console.log(user)
+                    getPlaylist(user, group.playlist_id).then((data) => 
+                    {
+                        console.log(data.data.tracks);
+                        parseTracks(data.data.tracks);
+                        // console.log(data)
+                        // setPlaylistInfo(data)
+                    })
+                    
                 }
             }
         }
         func()
     }, [])
-
     if (isInGroup === null) {
         return (
             <div>
@@ -156,6 +188,9 @@ export default function Group({ user, groupId }) {
                                 onClick={() => {
                                     copyToClipboard()
                                     setIsCopied(true)
+                                    setTimeout(() => {
+                                        setIsCopied(false)
+                                    }, 1000)
                                 }}
                         >
                                 <svg 
@@ -184,6 +219,7 @@ export default function Group({ user, groupId }) {
                         onClick={async () => {
                             const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
                             setPlaylistLink(playlist.external_urls.spotify)
+                            console.log(playlist)
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
                     >
@@ -226,6 +262,17 @@ export default function Group({ user, groupId }) {
                 <div>
                     <p>Group Members:</p>
                     {groupMembers.map(member => <p key={member}>{member}</p>)}
+                </div>
+                <div className="list-of-tracks">
+                    {playlistTracks && playlistTracks.map((track) => (
+                        <div>
+                            <p>{track.name}</p>
+                            {track.artists && track.artists.map((artist) => (
+                                <p>{artist}</p>
+                            ))}
+                            <img src={track.image_url} alt="soemone's track" />
+                        </div>
+                    ))}
                 </div>
                 <button
                     style={{'outline': 'none'}}
