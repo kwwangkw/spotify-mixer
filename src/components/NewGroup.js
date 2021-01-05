@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { navigate } from "gatsby"
 import { createGroup } from "../utils/data"
 
 export default function NewGroup({ user }) {
@@ -40,9 +41,10 @@ export default function NewGroup({ user }) {
                             onClick={async () => {
                                 const val = await createGroup(user, groupName)
                                 setShareLink(val)
+                                navigate(val)
                             }}
                         >
-                            Generate Invite Link
+                            Create Group
                         </button>
                         <button 
                             style={{'outline': 'none'}}

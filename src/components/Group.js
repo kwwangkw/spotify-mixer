@@ -53,6 +53,7 @@ export default function Group({ user, groupId }) {
     const [isCopied, setIsCopied] = useState(false)
     const [nullMessage, setNullMessage] = useState("Loading...")
     const [playlistTracks, setPlaylistTracks] = useState([])
+    const [timeoutID, setTimeoutID] = useState(null)
 
 
     function copyToClipboard(){
@@ -88,6 +89,16 @@ export default function Group({ user, groupId }) {
         setPlaylistTracks(tracks)
     }
 
+    function setCopyTimeout(milliseconds) {
+        if (timeoutID !== null) {
+            clearTimeout(timeoutID)
+        }
+        const newTimeoutID = setTimeout(() => {
+            setIsCopied(false)
+        }, milliseconds)
+        setTimeoutID(newTimeoutID)
+    }
+
     useEffect(() => {
         async function func() {
             if (!user) {
@@ -121,8 +132,6 @@ export default function Group({ user, groupId }) {
                 setGroupName(group.name)
                 setGroupMembers(group.users)
                 if (group.playlist_id) {
-                    // const playlist = await getPlaylist(user, group.playlist_id)
-                    // setPlaylistLink(playlist.external_urls.spotify)
                     setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
                     console.log(group.playlist_id)
                     console.log(user)
@@ -130,8 +139,6 @@ export default function Group({ user, groupId }) {
                     {
                         console.log(data.data.tracks);
                         parseTracks(data.data.tracks);
-                        // console.log(data)
-                        // setPlaylistInfo(data)
                     })
                     
                 }
@@ -188,9 +195,7 @@ export default function Group({ user, groupId }) {
                                 onClick={() => {
                                     copyToClipboard()
                                     setIsCopied(true)
-                                    setTimeout(() => {
-                                        setIsCopied(false)
-                                    }, 1000)
+                                    setCopyTimeout(2000)
                                 }}
                         >
                                 <svg 
@@ -212,7 +217,7 @@ export default function Group({ user, groupId }) {
                     <div className="text-gray-400 text-lg mb-12">
                         <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
                     </div>
-                    <h2 className="border-2 border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
+                    <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
