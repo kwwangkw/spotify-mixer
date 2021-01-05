@@ -35,7 +35,7 @@ export default function NewGroup({ user }) {
                     />
                     <div className="flex flex-row">
                         <button 
-                            className="ml-auto mr-1 text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3"
+                            className="ml-auto mr-1 text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                             style={{'outline': 'none'}}
                             onClick={async () => {
                                 const val = await createGroup(user, groupName)
@@ -46,7 +46,7 @@ export default function NewGroup({ user }) {
                         </button>
                         <button 
                             style={{'outline': 'none'}}
-                            className="mr-auto ml-1 py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3"
+                            className="mr-auto ml-1 py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                         >
                             <a
                                 href={"/app/home"}

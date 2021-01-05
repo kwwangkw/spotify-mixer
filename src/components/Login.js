@@ -9,7 +9,7 @@ export default function Login() {
                 <h1 className="text-5xl font-bold mb-2">Spotify<span className="text-white font-extralight">Mixer</span></h1>
                 <h2 className="text-2xl mb-7 text-gray-400 font-extralight">Create playlists with friends.</h2>
                 <div id="login-button">
-                    <button style={{'outline': 'none'}} className="text-dark-gray font-light bg-primary-500 text-lg text-center rounded-full py-2 px-5 flex flex-row">
+                    <button style={{'outline': 'none'}} className="text-dark-gray font-light bg-primary-500 text-lg text-center rounded-full py-2 px-5 flex flex-row hover:bg-primary-400 transition duration-300 ease-in-out">
                         <a href={
                             `${accountsAuthorizeURI}`+
                             `?response_type=code`+ 

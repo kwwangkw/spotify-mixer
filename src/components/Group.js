@@ -7,6 +7,41 @@ import { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup
 import { safeAPI, signOut } from "../utils/auth"
 import { navigate, useScrollRestoration } from "gatsby"
 
+
+const tooltip = {
+    // color: "#232129",
+    // padding: "96px",
+    // fontFamily: "-apple-system, Roboto, sans-serif, serif",
+}
+
+const tooltiptext = {
+    visibility: 'hidden',
+    width: '120px',
+    backgroundColor: 'black',
+    color: '#fff',
+    textAlign: 'center',
+    padding: '5px 0',
+    borderRadius: '6px',
+    position: 'absolute',
+    zIndex: '1',
+    top: '-5px',
+    left: '105%',
+}
+
+// const tooltiptext = {
+//     visibility: hidden,
+//     width: 120px,
+//     background-color: black,
+//     color: '#fff',
+//     text-align: center,
+//     padding: 5px 0,
+//     border-radius: 6px,
+    
+//     /* Position the tooltip text - see examples below! */
+//     position: 'absolute',
+//     zIndex: '1',
+// }
+
 export default function Group({ user, groupId }) {
     const [token, setToken] = useState("")
     const [refreshToken, setRefreshToken] = useState("")
@@ -68,19 +103,115 @@ export default function Group({ user, groupId }) {
     }
     if (!isInGroup) {
         return (
-            <div>
+            <div class="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+                <div className="w-full h-full flex flex-col justify-center text-center items-center">
+                    <h1 className="text-white font-thin text-5xl mb-16">
+                        You've been invited to join a Spotify Mixer group:
+                    </h1>
+                    <h1 className="italic text-primary-400 font-extralight text-6xl mb-16">{groupName}</h1>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="mx-auto text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                        onClick={() => {
+                            joinGroup(user, groupId).then(() => {
+                                window.location.reload()
+                            })
+                        }}
+                        disabled={isInGroup}
+                    >
+                        Join Group
+                    </button>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                    >
+                        <a href={"/app/home"}>
+                            Decline
+                        </a>
+                    </button>
+                </div>
+            </div>
+        )
+    }
+    if (playlistLink == "") {
+        return (
+            <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+                <div className="w-full h-full flex flex-col justify-center text-center items-center">
+                    <div className="flex flex-row">
+                        <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
+                        <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
+                                onClick={document.execCommand('copy')}
+                        >
+                                <svg 
+                                    className="ml-3 h-5 w-5 text-white-500"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />  
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                            <span class="absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible" style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
+                        </button>
+                    </div>
+                    <div className="text-gray-400 text-lg mb-12">
+                        <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
+                    </div>
+                    <h2 className="text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                        onClick={async () => {
+                            const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                            setPlaylistLink(playlist.external_urls.spotify)
+                        }}
+                        disabled={refreshToken === "" || expireTime === 0}
+                    >
+                        Generate Playlist
+                    </button>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                    >
+                        <a href={"/app/home"}>
+                            Home
+                        </a>
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+            <div className="w-full h-full flex flex-col justify-center text-center items-center">
+                <h1 className="text-white font-medium text-5xl mb-12">{groupName}</h1>
                 <button
-                    className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => {
-                        joinGroup(user, groupId).then(() => {
-                            window.location.reload()
-                        })
+                    style={{'outline': 'none'}}
+                    className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                    onClick={async () => {
+                        const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
+                        setPlaylistLink(playlist.external_urls.spotify)
                     }}
-                    disabled={isInGroup}
+                    disabled={refreshToken === "" || expireTime === 0}
                 >
-                    Join Group
+                    Generate Playlist
                 </button>
+                <div>
+                    Playlist Link: {playlistLink}
+                </div>
+                <div>
+                    Share link: {window.location.href}
+                </div>
+                <div>
+                    <p>Group Members:</p>
+                    {groupMembers.map(member => <p key={member}>{member}</p>)}
+                </div>
                 <button
+                    style={{'outline': 'none'}}
                     className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
                 >
                     <a href={"/app/home"}>
@@ -88,38 +219,6 @@ export default function Group({ user, groupId }) {
                     </a>
                 </button>
             </div>
-        )
-    }
-    return (
-        <div>
-            <h2>Group Name: {groupName}</h2>
-            <button
-                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                onClick={async () => {
-                    const playlist = await createAndFillPlaylist(user, groupId, refreshToken, expireTime)
-                    setPlaylistLink(playlist.external_urls.spotify)
-                }}
-                disabled={refreshToken === "" || expireTime === 0}
-            >
-                Generate Playlist
-            </button>
-            <div>
-                Playlist Link: {playlistLink}
-            </div>
-            <div>
-                Share link: {window.location.href}
-            </div>
-            <div>
-                <p>Group Members:</p>
-                {groupMembers.map(member => <p key={member}>{member}</p>)}
-            </div>
-            <button
-                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-            >
-                <a href={"/app/home"}>
-                    Cancel
-                </a>
-            </button>
         </div>
     )
 }
