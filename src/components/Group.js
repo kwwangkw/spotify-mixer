@@ -52,6 +52,18 @@ export default function Group({ user, groupId }) {
     const [groupMembers, setGroupMembers] = useState([])
     const [nullMessage, setNullMessage] = useState("Loading...")
 
+
+    function copyToClipboard(){
+        var dummy = document.createElement('input'),
+        text = window.location.href;
+
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+    }
+
     useEffect(() => {
         async function func() {
             if (!user) {
@@ -140,7 +152,7 @@ export default function Group({ user, groupId }) {
                     <div className="flex flex-row">
                         <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
                         <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
-                                onClick={document.execCommand('copy')}
+                                onClick={() => copyToClipboard()}
                         >
                                 <svg 
                                     className="ml-3 h-5 w-5 text-white-500"
