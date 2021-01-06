@@ -233,46 +233,69 @@ export default function Group({ user, groupId }) {
                     <div className="text-gray-400 text-lg mb-12">
                         <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}
                     </div>
-                    <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
-                    
-                    {/* FORM STUFF */}
-                    <div className="flex flex-col text-white text-lg">
-                        <label>Playlist Name </label>
-                        <input 
-                            className="text-3xl mb-8 bg-transparent text-white text-left font-thin text-center outline-none overflow-visible border-b border-white px-0" 
-                            placeholder="Raining Whales"
-                        />
-                        <label>Tracks per Contributor </label>
-                        <input 
-                            type="number"
-                            min="1"
-                            max="50"
-                            defaultValue = "3"
-                            className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
-                        />
+
+                    <div className="flex flex-col md:flex-row items-center">
+                        <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
+                            <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-4xl">Ahhhh!</h2>
+                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-4xl mb-16">You haven't created a playlist for this group yet- let's get started!</h2>
+                        </div>
+
+                        {/* FORM STUFF */}
+                        <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
+                            <label className="text-primary-400 text-xl font-light">Playlist Name</label>
+                            <input 
+                                className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
+                                placeholder="e.g. Raining Whales"
+                            />
+                            <label className="text-primary-400 text-xl font-light">Tracks per Contributor</label>
+                            <div className="w-1/4">
+                                <input 
+                                    type="number"
+                                    min="1"
+                                    max="50"
+                                    defaultValue = "3"
+                                    className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
+                                />
+                            </div>
+                            <label className="text-primary-400 text-xl font-light">Fav Songs From...</label>
+                            <div className="flex flex-row mb-8 text-xl lg:text-2xl text-white font-thin text-center">
+                                <label className="mx-3">
+                                    <input type="radio" name="size" id="small" value="small" />
+                                    <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
+                                </label>
+                                <label className="mx-3">
+                                    <input type="radio" name="size" id="small" value="small" />
+                                    <span className="mb-8 bg-transparent outline-none ml-2">Past Half Year</span>
+                                </label>
+                                <label className="mx-3">
+                                    <input type="radio" name="size" id="small" value="small" />
+                                    <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
+                                </label>
+                            </div>
+
+                            <button
+                                style={{'outline': 'none'}}
+                                className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                                onClick={async () => {
+                                    const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
+                                    console.log(playlist)
+                                    setPlaylistID(playlist.id)
+                                    setPlaylistLink(playlist.external_urls.spotify)
+                                    refreshPlaylist(playlist.id)
+                                }}
+                            >
+                                Generate Playlist
+                            </button>
+                            <button
+                                style={{'outline': 'none'}}
+                                className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                            >
+                                <Link to={"/app/home"}>
+                                    Home
+                                </Link>
+                            </button>
+                        </div>
                     </div>
-                    
-                    <button
-                        style={{'outline': 'none'}}
-                        className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
-                        onClick={async () => {
-                            const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
-                            console.log(playlist)
-                            setPlaylistID(playlist.id)
-                            setPlaylistLink(playlist.external_urls.spotify)
-                            refreshPlaylist(playlist.id)
-                        }}
-                    >
-                        Generate Playlist
-                    </button>
-                    <button
-                        style={{'outline': 'none'}}
-                        className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                    >
-                        <Link to={"/app/home"}>
-                            Home
-                        </Link>
-                    </button>
                 </div>
             </div>
         )
@@ -327,7 +350,7 @@ export default function Group({ user, groupId }) {
                             <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
                         </a>
                     </div>
-                        <h2 className="mb-10 text-gray-400 font-light">{playlistTracks.length} Tracks from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}</h2>
+                        <h2 className="mb-10 text-gray-400 font-light mx-auto">{playlistTracks.length} Tracks from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -348,12 +371,16 @@ export default function Group({ user, groupId }) {
                                     <div id="desc" className="w-full flex flex-col justify-center">
                                         <div>
                                             <div className="flex flex-row w-full justify-between">
-                                                <p className="text-white mb-1 group-hover:underline">{track.name}</p>
+                                                <div className="pr-3">
+                                                    <p className="text-white mb-1 group-hover:underline">{track.name}</p>
+                                                </div>
                                                 <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec < 10 ? '0' : ""}{track.duration_sec}</p>
                                             </div>
-                                            {track.artists && track.artists.map((artist, index) => (
-                                                <span key={index} className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
-                                            ))}
+                                            <div className="pr-10">
+                                                {track.artists && track.artists.map((artist, index) => (
+                                                    <span key={index} className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
