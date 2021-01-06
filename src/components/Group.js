@@ -43,9 +43,6 @@ const tooltiptext = {
 // }
 
 export default function Group({ user, groupId }) {
-    const [token, setToken] = useState("")
-    const [refreshToken, setRefreshToken] = useState("")
-    const [expireTime, setExpireTime] = useState(0)
     const [isInGroup, setIsInGroup] = useState(null)
     const [groupName, setGroupName] = useState("")
     const [playlistID, setPlaylistID] = useState(null)
@@ -238,46 +235,23 @@ export default function Group({ user, groupId }) {
                     </div>
                     <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
                     
-                    <input 
-                        className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
-                        placeholder="Playlist Name" 
-                        onChange={e =>
-                            setGroupName(e.target.value)
-                        }
-                    />
-
-                    <input 
-                        type="number"
-                        min="1"
-                        max="50"
-                        className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
-                        placeholder="Tracks per Person" 
-                        onChange={e =>
-                            setGroupName(e.target.value)
-                        }
-                    />
+                    {/* FORM STUFF */}
+                    <div className="flex flex-col text-white text-lg">
+                        <label>Playlist Name </label>
+                        <input 
+                            className="text-3xl mb-8 bg-transparent text-white text-left font-thin text-center outline-none overflow-visible border-b border-white px-0" 
+                            placeholder="Raining Whales"
+                        />
+                        <label>Tracks per Contributor </label>
+                        <input 
+                            type="number"
+                            min="1"
+                            max="50"
+                            defaultValue = "3"
+                            className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
+                        />
+                    </div>
                     
-                    {/* DROPDOWN */}
-                    <div className="relative inline-block text-left">
-                    <div>
-                        <button type="button" className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                        Your Eras
-                        {/* Heroicon name: chevron-down */}
-                        <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                        </svg>
-                        </button>
-                    </div>
-                    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Recent Favs</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Within the Year</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">All Time</a>
-                        </div>
-                    </div>
-                    </div>
-                    {/* END DROPDOWN */}
-
                     <button
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -288,7 +262,6 @@ export default function Group({ user, groupId }) {
                             setPlaylistLink(playlist.external_urls.spotify)
                             refreshPlaylist(playlist.id)
                         }}
-                        disabled={refreshToken === "" || expireTime === 0}
                     >
                         Generate Playlist
                     </button>
@@ -362,7 +335,6 @@ export default function Group({ user, groupId }) {
                             await updatePlaylist(user.uid, groupId, playlistID, "medium_term", 10)
                             refreshPlaylist(playlistID)
                         }}
-                        disabled={refreshToken === "" || expireTime === 0}
                     >
                         Update Playlist
                     </button>
