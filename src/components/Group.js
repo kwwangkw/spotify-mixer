@@ -3,7 +3,7 @@ import axios from "axios"
 import firebaseInst from "../firebase"
 import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
-import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup } from "../utils/data"
+import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
 import { Link, navigate, useScrollRestoration } from "gatsby"
 
@@ -114,7 +114,17 @@ export default function Group({ user, groupId }) {
             setPlaylistName(data.data.name)
             setPlaylistImageLink(data.data.images[0].url)
             parseTracks(data.data.tracks);
+        }).catch(error => {
+            if (error && error.response && error.response.status === 404) {
+                makePlaylistEmpty()
+            }
         })
+    }
+
+    function makePlaylistEmpty() {
+        setPlaylistID("")
+        setPlaylistLink("")
+        setPlaylistImageLink("")
     }
 
     useEffect(() => {
@@ -122,19 +132,6 @@ export default function Group({ user, groupId }) {
             if (!user) {
                 return
             }
-            const db = firebaseInst.firestore()
-            db.collection(usersCollection).doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    const data = doc.data()
-                    setAxiosTokenHeader(data.curr_token)
-                    setToken(data.curr_token)
-                    setRefreshToken(data.refresh_token)
-                    setExpireTime(data.expire_time)
-                    return data
-                } else {
-                    console.log("user does not exist")
-                }
-            })
 
             checkIsInGroup(user, groupId).then(val => {
                 if (val !== null) {
@@ -148,7 +145,14 @@ export default function Group({ user, groupId }) {
             const group = await getGroup(groupId)
             if (group) {
                 setGroupName(group.name)
-                setGroupMembers(group.users)
+                let newGroupMembers = []
+                for (const uid of group.users) {
+                    let member = await getUser(uid)
+                    // member = (({display_name, }))
+                    newGroupMembers.push(member)
+                }
+                console.log(newGroupMembers)
+                setGroupMembers(newGroupMembers)
                 if (group.playlist_id) {
                     setPlaylistID(group.playlist_id)
                     setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
@@ -230,9 +234,50 @@ export default function Group({ user, groupId }) {
                         </button>
                     </div>
                     <div className="text-gray-400 text-lg mb-12">
-                        <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
+                        <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}
                     </div>
                     <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
+                    
+                    <input 
+                        className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
+                        placeholder="Playlist Name" 
+                        onChange={e =>
+                            setGroupName(e.target.value)
+                        }
+                    />
+
+                    <input 
+                        type="number"
+                        min="1"
+                        max="50"
+                        className="text-3xl mb-12 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
+                        placeholder="Tracks per Person" 
+                        onChange={e =>
+                            setGroupName(e.target.value)
+                        }
+                    />
+                    
+                    {/* DROPDOWN */}
+                    <div className="relative inline-block text-left">
+                    <div>
+                        <button type="button" className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                        Your Eras
+                        {/* Heroicon name: chevron-down */}
+                        <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                        </svg>
+                        </button>
+                    </div>
+                    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Recent Favs</a>
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Within the Year</a>
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">All Time</a>
+                        </div>
+                    </div>
+                    </div>
+                    {/* END DROPDOWN */}
+
                     <button
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -289,7 +334,7 @@ export default function Group({ user, groupId }) {
                     </button>
                 </div>
                 <div className="text-gray-400 text-lg mb-3">
-                    <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
+                    <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}   
                 </div>
                 <button
                     style={{'outline': 'none'}}
@@ -345,44 +390,6 @@ export default function Group({ user, groupId }) {
                     </div>
                 </div>
             </div>
-            
-            {/*
-            <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
-                <div className="w-full h-full flex flex-col justify-center text-center items-center">
-                    <h1 className="text-white font-medium text-5xl mb-12">{groupName}</h1>
-                    <button
-                        style={{'outline': 'none'}}
-                        className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
-                        onClick={async () => {
-                            const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
-                            setPlaylistLink(playlist.external_urls.spotify)
-                        }}
-                        disabled={refreshToken === "" || expireTime === 0}
-                    >
-                        Update Playlist
-                    </button>
-                    <div>
-                        Playlist Link: {playlistLink}
-                    </div>
-                    <div>
-                        Share link: {window.location.href}
-                    </div>
-                    <div>
-                        <p>Group Members:</p>
-                        {groupMembers.map(member => <p key={member}>{member}</p>)}
-                    </div>
-                    
-                    <button
-                        style={{'outline': 'none'}}
-                        className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                    >
-                        <Link to={"/app/home"}>
-                            Cancel
-                        </Link>
-                    </button>
-                </div>
-            </div>
-            */}
         </div>
     )
 }

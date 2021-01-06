@@ -140,4 +140,12 @@ async function getUserGroups(uid) {
     return userGroups
 }
 
-export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }
+async function getUser(uid) {
+    const user = await safeAPI(
+        uid,
+        () => axios.get(`https://api.spotify.com/v1/users/${uid}`),
+    )
+    return user.data
+}
+
+export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups, getUser }
