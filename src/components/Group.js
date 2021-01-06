@@ -55,6 +55,11 @@ export default function Group({ user, groupId }) {
     const [playlistTracks, setPlaylistTracks] = useState([])
     const [timeoutID, setTimeoutID] = useState(null)
 
+    // For generate playlist form
+    const DEFAULT_LIMIT_PER_PERSON = 3
+    const [limitPerPerson, setLimitPerPerson] = useState(DEFAULT_LIMIT_PER_PERSON)
+    const DEFAULT_TIME_RANGE = "short_term"
+    const [timeRange, setTimeRange] = useState(DEFAULT_TIME_RANGE)
 
     function copyToClipboard(){
         var temp = document.createElement('input'),
@@ -145,7 +150,7 @@ export default function Group({ user, groupId }) {
                 let newGroupMembers = []
                 for (const uid of group.users) {
                     let member = await getUser(uid)
-                    // member = (({display_name, }))
+                    member = (({id, display_name, images}) => ({id, display_name, images}))(member)
                     newGroupMembers.push(member)
                 }
                 console.log(newGroupMembers)
@@ -246,6 +251,7 @@ export default function Group({ user, groupId }) {
                             <input 
                                 className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
                                 placeholder="e.g. Raining Whales"
+                                onChange={e => setPlaylistName(e.target.value)}
                             />
                             <label className="text-primary-400 text-xl font-light">Tracks per Contributor</label>
                             <div className="w-1/4">
@@ -253,22 +259,23 @@ export default function Group({ user, groupId }) {
                                     type="number"
                                     min="1"
                                     max="50"
-                                    defaultValue = "3"
+                                    defaultValue = {DEFAULT_LIMIT_PER_PERSON.toString()}
+                                    onChange={e => setLimitPerPerson(parseFloat(e.target.value))}
                                     className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
                                 />
                             </div>
                             <label className="text-primary-400 text-xl font-light">Fav Songs From...</label>
                             <div className="flex flex-row md:flex-col lg:flex-row mb-8 text-xl text-white font-thin text-center">
                                 <label className="mx-3">
-                                    <input type="radio" name="size" id="small" value="small" />
+                                    <input type="radio" name="size" id="short_term" value="short_term" checked={timeRange === "short_term"} onChange={e => setTimeRange(e.target.value)} />
                                     <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
                                 </label>
                                 <label className="mx-3">
-                                    <input type="radio" name="size" id="small" value="small" />
+                                    <input type="radio" name="size" id="medium_term" value="medium_term" checked={timeRange === "medium_term"} onChange={e => setTimeRange(e.target.value)} />
                                     <span className="mb-8 bg-transparent outline-none ml-2">Past Half Year</span>
                                 </label>
                                 <label className="mx-3">
-                                    <input type="radio" name="size" id="small" value="small" />
+                                    <input type="radio" name="size" id="long_term" value="long_term" checked={timeRange === "long_term"} onChange={e => setTimeRange(e.target.value)} />
                                     <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
                                 </label>
                             </div>
@@ -277,11 +284,18 @@ export default function Group({ user, groupId }) {
                                 style={{'outline': 'none'}}
                                 className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                                 onClick={async () => {
-                                    const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
-                                    console.log(playlist)
-                                    setPlaylistID(playlist.id)
-                                    setPlaylistLink(playlist.external_urls.spotify)
-                                    refreshPlaylist(playlist.id)
+                                    try {
+                                        const playlist = await createAndFillPlaylist(user, groupId, playlistName, timeRange, limitPerPerson)
+                                        console.log(playlist)
+                                        setPlaylistID(playlist.id)
+                                        setPlaylistLink(playlist.external_urls.spotify)
+                                        refreshPlaylist(playlist.id)
+                                    } catch(e){
+                                        if (e !== "invalid input") {
+                                            throw e
+                                        }
+                                        alert("Invalid input")
+                                    }
                                 }}
                             >
                                 Generate Playlist
@@ -355,7 +369,7 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
-                            await updatePlaylist(user.uid, groupId, playlistID, "medium_term", 10)
+                            await updatePlaylist(user.uid, groupId, playlistID, timeRange, limitPerPerson)
                             refreshPlaylist(playlistID)
                         }}
                     >
