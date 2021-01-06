@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { getUserGroups } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
+import { Link } from "gatsby"
 
 export default function Home({ user }) {
     const [artists, setArtists] = useState("")
@@ -24,12 +25,12 @@ export default function Home({ user }) {
             <div>Your fav artist: {artists}</div>
             <div>
                 <p>Groups:</p>
-                {groups.map(group => <div key={group.id}><a href={`${process.env.BASE_URI}/app/group/${group.id}`}>{group.name}</a></div>)}
+                {groups.map(group => <div key={group.id}><Link to={`/app/group/${group.id}`}>{group.name}</Link></div>)}
             </div>
             <button>
-                <a href="/app/newg">
+                <Link to={"/app/newg"}>
                     New Group
-                </a>
+                </Link>
             </button>
             <br/>
             <button

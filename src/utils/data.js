@@ -100,7 +100,7 @@ async function createGroup(user, groupName) {
         users: [user.uid],
     })
     db.collection(usersCollection).doc(user.uid).update("groups", FieldValue.arrayUnion(docRef.id))
-    return `${process.env.BASE_URI}/app/group/${docRef.id}`
+    return `/app/group/${docRef.id}`
 }
 
 async function getGroup(groupId) {

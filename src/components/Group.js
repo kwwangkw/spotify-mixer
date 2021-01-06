@@ -5,7 +5,7 @@ import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 import { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
-import { navigate, useScrollRestoration } from "gatsby"
+import { Link, navigate, useScrollRestoration } from "gatsby"
 
 
 const tooltip = {
@@ -74,6 +74,7 @@ export default function Group({ user, groupId }) {
         for(let index = 0; index < tracksIn.items.length; index++){
             let trackInfo = tracksIn.items[index].track
             let currentTrack = {
+                id: trackInfo.id,
                 name: trackInfo.name,
                 artists: [],
                 image_url: trackInfo.album.images[0].url,
@@ -162,7 +163,7 @@ export default function Group({ user, groupId }) {
     }
     if (!isInGroup) {
         return (
-            <div class="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+            <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
                 <div className="w-full h-full flex flex-col justify-center text-center items-center">
                     <h1 className="text-white font-thin text-5xl mb-16">
                         You've been invited to join a Spotify Mixer group:
@@ -184,9 +185,9 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                     >
-                        <a href={"/app/home"}>
+                        <Link to={"/app/home"}>
                             Decline
-                        </a>
+                        </Link>
                     </button>
                 </div>
             </div>
@@ -241,9 +242,9 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                     >
-                        <a href={"/app/home"}>
+                        <Link to={"/app/home"}>
                             Home
-                        </a>
+                        </Link>
                     </button>
                 </div>
             </div>
@@ -285,9 +286,9 @@ export default function Group({ user, groupId }) {
                     style={{'outline': 'none'}}
                     className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                 >
-                    <a href={"/app/home"}>
+                    <Link to={"/app/home"}>
                         Home
-                    </a>
+                    </Link>
                 </button>
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
@@ -316,7 +317,7 @@ export default function Group({ user, groupId }) {
                 <div id="right" className="lg:w-full ml-5 md:ml-20 lg:ml-0 pr-5 md:pr-10 lg:pr-20">
                     <div className="list-of-tracks w-full -mt-3">
                         {playlistTracks && playlistTracks.map((track) => (
-                            <a href={track.song_url} target="_blank" rel="noop  ener noreferrer">
+                            <a key={track.id} href={track.song_url} target="_blank" rel="noop  ener noreferrer">
                                 <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
                                 <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
                                     <div id="desc" className="w-full flex flex-col justify-center">
@@ -326,7 +327,7 @@ export default function Group({ user, groupId }) {
                                                 <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec < 10 ? '0' : ""}{track.duration_sec}</p>
                                             </div>
                                             {track.artists && track.artists.map((artist, index) => (
-                                                <span className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
+                                                <span key={index} className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
                                             ))}
                                         </div>
                                     </div>
@@ -367,9 +368,9 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
                     >
-                        <a href={"/app/home"}>
+                        <Link to={"/app/home"}>
                             Cancel
-                        </a>
+                        </Link>
                     </button>
                 </div>
             </div>
