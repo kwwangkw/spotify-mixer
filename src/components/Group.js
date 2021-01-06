@@ -323,7 +323,7 @@ export default function Group({ user, groupId }) {
                                         <div>
                                             <div className="flex flex-row w-full justify-between">
                                                 <p className="text-white mb-1 group-hover:underline">{track.name}</p>
-                                                <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec}</p>
+                                                <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec < 10 ? '0' : ""}{track.duration_sec}</p>
                                             </div>
                                             {track.artists && track.artists.map((artist, index) => (
                                                 <span className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
