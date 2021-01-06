@@ -294,11 +294,12 @@ export default function Group({ user, groupId }) {
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
                     <div className="group">
                         <a href={playlistLink} target="_blank">
-                        <img width="300" height="300" className="mb-2 flex-shrink-0" src={playlistImageLink} />
-                        <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
+                            <img width="300" height="300" className="relative mb-2 flex-shrink-0" src={playlistImageLink} />
+                            {/* <div className="absolute z-2 bg-primary-400" style={{'width': '300', 'height': '300'}}></div> */}
+                            <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
                         </a>
                     </div>
-                    <h2 className="mb-10 text-gray-400 font-light">{playlistTracks.length} Tracks</h2>
+                        <h2 className="mb-10 text-gray-400 font-light">{playlistTracks.length} Tracks from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -324,8 +325,8 @@ export default function Group({ user, groupId }) {
                                                 <p className="text-white mb-1 group-hover:underline">{track.name}</p>
                                                 <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec}</p>
                                             </div>
-                                            {track.artists && track.artists.map((artist) => (
-                                                <span className="text-gray-400">{artist} &#183; </span>
+                                            {track.artists && track.artists.map((artist, index) => (
+                                                <span className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
                                             ))}
                                         </div>
                                     </div>
