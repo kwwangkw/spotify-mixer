@@ -15,7 +15,7 @@ async function createPlaylist(uid, name) {
     )
 }
 
-async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+async function getTopTracks(groupID, timeRange, limitPerPerson) {
     const db = firebaseInst.firestore()
     const groupRef = db.collection(groupsCollection).doc(groupID)
     const doc = await groupRef.get()
@@ -44,6 +44,12 @@ async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson)
             console.log(err)
         }
     }
+    return topTracks
+}
+
+async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+    const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
+    console.log(topTracks)
     const requestBody = {
         uris: topTracks
     }
@@ -51,13 +57,15 @@ async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson)
         uid,
         () => axios.post(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, requestBody),
     )
-    return groupRef.update("playlist_id", playlistID)
+
+    const db = firebaseInst.firestore()
+    return db.collection(groupsCollection).doc(groupID).update("playlist_id", playlistID)
 }
 
 async function createAndFillPlaylist(user, groupID, name, timeRange, limitPerPerson) {
     const playlist = await createPlaylist(user.uid, name)
-    fillPlaylist(user.uid, groupID, playlist.data.id, timeRange, limitPerPerson)
-    return playlist.data // id, link will be correct but tracks will not be up to date
+    await fillPlaylist(user.uid, groupID, playlist.data.id, timeRange, limitPerPerson)
+    return playlist.data
 }
 
 async function getPlaylist(user, playlistId) {
@@ -66,6 +74,17 @@ async function getPlaylist(user, playlistId) {
         () => axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`)
     )
     return playlist
+}
+
+async function updatePlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+    const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
+    const requestBody = {
+        uris: topTracks
+    }
+    return safeAPI(
+        uid,
+        () => axios.put(`https://api.spotify.com/v1/users/${uid}/playlists/${playlistID}/tracks`, requestBody),
+    )
 }
 
 async function checkIsInGroup(user, groupId) {
@@ -121,4 +140,4 @@ async function getUserGroups(uid) {
     return userGroups
 }
 
-export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }
+export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }

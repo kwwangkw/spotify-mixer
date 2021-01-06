@@ -3,7 +3,7 @@ import axios from "axios"
 import firebaseInst from "../firebase"
 import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
-import { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup } from "../utils/data"
+import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
 import { Link, navigate, useScrollRestoration } from "gatsby"
 
@@ -48,6 +48,7 @@ export default function Group({ user, groupId }) {
     const [expireTime, setExpireTime] = useState(0)
     const [isInGroup, setIsInGroup] = useState(null)
     const [groupName, setGroupName] = useState("")
+    const [playlistID, setPlaylistID] = useState(null)
     const [playlistLink, setPlaylistLink] = useState("")
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImageLink, setPlaylistImageLink] = useState("")
@@ -106,6 +107,16 @@ export default function Group({ user, groupId }) {
         setTimeoutID(newTimeoutID)
     }
 
+    function refreshPlaylist(playlistID) {
+        getPlaylist(user, playlistID).then((data) => 
+        {
+            console.log(data)
+            setPlaylistName(data.data.name)
+            setPlaylistImageLink(data.data.images[0].url)
+            parseTracks(data.data.tracks);
+        })
+    }
+
     useEffect(() => {
         async function func() {
             if (!user) {
@@ -139,21 +150,17 @@ export default function Group({ user, groupId }) {
                 setGroupName(group.name)
                 setGroupMembers(group.users)
                 if (group.playlist_id) {
+                    setPlaylistID(group.playlist_id)
                     setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
                     console.log(group.playlist_id)
                     console.log(user)
-                    getPlaylist(user, group.playlist_id).then((data) => 
-                    {
-                        setPlaylistName(data.data.name)
-                        setPlaylistImageLink(data.data.images[0].url)
-                        parseTracks(data.data.tracks);
-                    })
-                    
+                    refreshPlaylist(group.playlist_id)
                 }
             }
         }
         func()
     }, [])
+
     if (isInGroup === null) {
         return (
             <div>
@@ -231,8 +238,10 @@ export default function Group({ user, groupId }) {
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
                             const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
-                            setPlaylistLink(playlist.external_urls.spotify)
                             console.log(playlist)
+                            setPlaylistID(playlist.id)
+                            setPlaylistLink(playlist.external_urls.spotify)
+                            refreshPlaylist(playlist.id)
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
                     >
@@ -305,9 +314,8 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
-                            const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
-                            setPlaylistLink(playlist.external_urls.spotify)
-                            console.log(playlist)
+                            await updatePlaylist(user.uid, groupId, playlistID, "medium_term", 10)
+                            refreshPlaylist(playlistID)
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
                     >
