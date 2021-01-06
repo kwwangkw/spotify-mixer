@@ -80,6 +80,7 @@ export default function Group({ user, groupId }) {
                 album_name: "",
                 duration_min: Math.trunc(trackInfo.duration_ms/60000),
                 duration_sec: Math.trunc((trackInfo.duration_ms-(Math.trunc(trackInfo.duration_ms/60000)*60000))/1000),
+                song_url: trackInfo.external_urls.spotify
             }
             if (trackInfo.album.album_type === 'album') {
                 currentTrack.album_name = trackInfo.album.name
@@ -251,7 +252,7 @@ export default function Group({ user, groupId }) {
 
     return (
         <div className="bg-dark-gray text-primary-400 w-full font-sans">
-            <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-20">
+            <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-12 lg:mb-20">
                 <div className="flex flex-row">
                     <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
                     <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
@@ -290,10 +291,14 @@ export default function Group({ user, groupId }) {
                 </button>
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
-                <div id="left" className="lg:w-1/3 text-center mb-20 lg:mb-0 lg:mr-20">
-                    <img src={playlistImageLink} />
-                    <h2 className="mb-3 text-white font-light">{playlistName}</h2>
-                    <h2 className="mb-10 text-white font-light">{playlistTracks.length} Tracks</h2>
+                <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
+                    <div className="group">
+                        <a href={playlistLink} target="_blank">
+                        <img width="300" height="300" className="mb-2 flex-shrink-0" src={playlistImageLink} />
+                        <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
+                        </a>
+                    </div>
+                    <h2 className="mb-10 text-gray-400 font-light">{playlistTracks.length} Tracks</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -310,20 +315,22 @@ export default function Group({ user, groupId }) {
                 <div id="right" className="lg:w-full ml-5 md:ml-20 lg:ml-0 pr-5 md:pr-10 lg:pr-20">
                     <div className="list-of-tracks w-full -mt-3">
                         {playlistTracks && playlistTracks.map((track) => (
-                            <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-gray-900 transition duration-300 ease-in-out">
+                            <a href={track.song_url} target="_blank" rel="noop  ener noreferrer">
+                                <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
                                 <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
-                                <div id="desc" className="w-full flex flex-col justify-center">
-                                    <div>
-                                        <div className="flex flex-row w-full justify-between">
-                                            <p className="text-white mb-1">{track.name}</p>
-                                            <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec}</p>
+                                    <div id="desc" className="w-full flex flex-col justify-center">
+                                        <div>
+                                            <div className="flex flex-row w-full justify-between">
+                                                <p className="text-white mb-1 group-hover:underline">{track.name}</p>
+                                                <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec}</p>
+                                            </div>
+                                            {track.artists && track.artists.map((artist) => (
+                                                <span className="text-gray-400">{artist} &#183; </span>
+                                            ))}
                                         </div>
-                                        {track.artists && track.artists.map((artist) => (
-                                            <span className="text-gray-400">{artist} &#183; </span>
-                                        ))}
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         ))}
                     </div>
                 </div>

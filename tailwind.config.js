@@ -15,6 +15,9 @@ module.exports = {
         "spotify-gray": '#222326',
         "dark-gray": '#121212',
         "primary": colors.emerald,
+      },
+      opacity: {
+        '15' : '.15',
       }
     },
   },
