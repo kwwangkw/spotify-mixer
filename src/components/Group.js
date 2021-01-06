@@ -49,6 +49,8 @@ export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
     const [groupName, setGroupName] = useState("")
     const [playlistLink, setPlaylistLink] = useState("")
+    const [playlistName, setPlaylistName] = useState("")
+    const [playlistImageLink, setPlaylistImageLink] = useState("")
     const [groupMembers, setGroupMembers] = useState([])
     const [isCopied, setIsCopied] = useState(false)
     const [nullMessage, setNullMessage] = useState("Loading...")
@@ -76,6 +78,8 @@ export default function Group({ user, groupId }) {
                 artists: [],
                 image_url: trackInfo.album.images[0].url,
                 album_name: "",
+                duration_min: Math.trunc(trackInfo.duration_ms/60000),
+                duration_sec: Math.trunc((trackInfo.duration_ms-(Math.trunc(trackInfo.duration_ms/60000)*60000))/1000),
             }
             if (trackInfo.album.album_type === 'album') {
                 currentTrack.album_name = trackInfo.album.name
@@ -87,6 +91,7 @@ export default function Group({ user, groupId }) {
             tracks.push(currentTrack)
         }
         setPlaylistTracks(tracks)
+        console.log(tracks)
     }
 
     function setCopyTimeout(milliseconds) {
@@ -137,7 +142,8 @@ export default function Group({ user, groupId }) {
                     console.log(user)
                     getPlaylist(user, group.playlist_id).then((data) => 
                     {
-                        console.log(data.data.tracks);
+                        setPlaylistName(data.data.name)
+                        setPlaylistImageLink(data.data.images[0].url)
                         parseTracks(data.data.tracks);
                     })
                     
@@ -185,7 +191,7 @@ export default function Group({ user, groupId }) {
             </div>
         )
     }
-    if (playlistLink == "") {
+    if (playlistLink === "") {
         return (
             <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
                 <div className="w-full h-full flex flex-col justify-center text-center items-center">
@@ -276,7 +282,7 @@ export default function Group({ user, groupId }) {
                 </div>
                 <button
                     style={{'outline': 'none'}}
-                    className="py-1 text-white font bg-gray-500 text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                    className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                 >
                     <a href={"/app/home"}>
                         Home
@@ -284,7 +290,9 @@ export default function Group({ user, groupId }) {
                 </button>
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
-                <div id="left" className="lg:w-1/4 text-center mb-20 lg:mb-0 lg:mr-20">
+                <div id="left" className="lg:w-1/3 text-center mb-20 lg:mb-0 lg:mr-20">
+                    <img src={playlistImageLink} />
+                    <h2 className="mb-3 text-white font-light">{playlistName}</h2>
                     <h2 className="mb-10 text-white font-light">{playlistTracks.length} Tracks</h2>
                     <button
                         style={{'outline': 'none'}}
@@ -299,14 +307,17 @@ export default function Group({ user, groupId }) {
                         Update Playlist
                     </button>
                 </div>
-                <div id="right" className="w-full ml-5 md:ml-20 lg:ml-0 pr-20">
+                <div id="right" className="lg:w-full ml-5 md:ml-20 lg:ml-0 pr-5 md:pr-10 lg:pr-20">
                     <div className="list-of-tracks w-full -mt-3">
                         {playlistTracks && playlistTracks.map((track) => (
                             <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-gray-900 transition duration-300 ease-in-out">
                                 <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
-                                <div id="desc" className=" flex flex-col justify-center">
+                                <div id="desc" className="w-full flex flex-col justify-center">
                                     <div>
-                                        <p className="text-white mb-1">{track.name}</p>
+                                        <div className="flex flex-row w-full justify-between">
+                                            <p className="text-white mb-1">{track.name}</p>
+                                            <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec}</p>
+                                        </div>
                                         {track.artists && track.artists.map((artist) => (
                                             <span className="text-gray-400">{artist} &#183; </span>
                                         ))}
