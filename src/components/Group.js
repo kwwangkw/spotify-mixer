@@ -258,7 +258,7 @@ export default function Group({ user, groupId }) {
                                 />
                             </div>
                             <label className="text-primary-400 text-xl font-light">Fav Songs From...</label>
-                            <div className="flex flex-row mb-8 text-xl lg:text-2xl text-white font-thin text-center">
+                            <div className="flex flex-row md:flex-col lg:flex-row mb-8 text-xl text-white font-thin text-center">
                                 <label className="mx-3">
                                     <input type="radio" name="size" id="small" value="small" />
                                     <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
