@@ -3,9 +3,9 @@ import firebaseInst, { FieldValue } from "../firebase"
 import { safeAPI } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 
-async function createPlaylist(uid, name) {
+async function createPlaylist(uid, playlistName) {
     let requestBody = {
-        name: name,
+        name: playlistName,
         public: false,
         collaborative: true,
     }
@@ -47,7 +47,7 @@ async function getTopTracks(groupID, timeRange, limitPerPerson) {
     return topTracks
 }
 
-async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, limitPerPerson) {
     const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
     console.log(topTracks)
     const requestBody = {
@@ -59,16 +59,22 @@ async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson)
     )
 
     const db = firebaseInst.firestore()
-    return db.collection(groupsCollection).doc(groupID).update("playlist_id", playlistID)
+    return db.collection(groupsCollection).doc(groupID).update({
+        playlist_id: playlistID,
+        playlist_name: playlistName,
+        time_range: timeRange,
+        limit_per_person: limitPerPerson
+    })
 }
 
-async function createAndFillPlaylist(user, groupID, name, timeRange, limitPerPerson) {
-    if (!name || !["short_term", "medium_term", "long_term"].includes(timeRange) || 
+async function createAndFillPlaylist(user, groupID, playlistName, timeRange, limitPerPerson) {
+    if (!playlistName || !["short_term", "medium_term", "long_term"].includes(timeRange) || 
         !Number.isInteger(limitPerPerson) || limitPerPerson <= 0 || limitPerPerson > 50) {
         throw "invalid input"
     }
-    const playlist = await createPlaylist(user.uid, name)
-    await fillPlaylist(user.uid, groupID, playlist.data.id, timeRange, limitPerPerson)
+    const playlist = await createPlaylist(user.uid, playlistName)
+    await fillPlaylist(user.uid, groupID, playlistName, playlist.data.id, timeRange, limitPerPerson)
+
     return playlist.data
 }
 
@@ -80,7 +86,16 @@ async function getPlaylist(user, playlistId) {
     return playlist
 }
 
-async function updatePlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+async function getPlaylistOptions(groupID) {
+    const db = firebaseInst.firestore()
+    const snapshot = await db.collection(groupsCollection).doc(groupID).get()
+    const data = snapshot.data()
+    return [data.time_range, data.limit_per_person]
+}
+
+async function updatePlaylist(uid, groupID, playlistID) {
+    const [timeRange, limitPerPerson] = await getPlaylistOptions(groupID)
+    console.log(timeRange, limitPerPerson)
     const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
     const requestBody = {
         uris: topTracks
