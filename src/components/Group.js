@@ -92,7 +92,7 @@ export default function Group({ user, groupId }) {
             tracks.push(currentTrack)
         }
         setPlaylistTracks(tracks)
-        console.log(tracks)
+        console.log("parsed tracks");
     }
 
     function setCopyTimeout(milliseconds) {
@@ -224,14 +224,15 @@ export default function Group({ user, groupId }) {
                     <div className="text-gray-400 text-lg mb-12">
                         <span> &#183; </span>{groupMembers.map(member => <span key={member}>{member} &#183; </span>)}
                     </div>
-                    <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">It doesn't look like you've created a playlist for this group yet!</h2>
+                    <h2 className="border-none border-primary-400 p-5 rounded-2xl text-white font-extralight text-3xl mb-16">Looks like you haven't created a playlist for this group yet!</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
                             const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
                             setPlaylistLink(playlist.external_urls.spotify)
-                            console.log(playlist)
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            window.location.reload();
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
                     >
@@ -306,7 +307,8 @@ export default function Group({ user, groupId }) {
                         onClick={async () => {
                             const playlist = await createAndFillPlaylist(user, groupId, "test playlist", "medium_term", 10)
                             setPlaylistLink(playlist.external_urls.spotify)
-                            console.log(playlist)
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            window.location.reload();
                         }}
                         disabled={refreshToken === "" || expireTime === 0}
                     >
