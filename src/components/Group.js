@@ -316,7 +316,7 @@ export default function Group({ user, groupId }) {
     }
 
     return (
-        <div className="bg-dark-gray text-primary-400 w-full font-sans">
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
             <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-12 lg:mb-20">
                 <div className="flex flex-row">
                     <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
