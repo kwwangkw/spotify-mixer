@@ -227,6 +227,7 @@ export default function Group({ user, groupId }) {
                     >
                         Leave Group
                     </button>
+                    {/*
                     <button
                         style={{'outline': 'none'}}
                         className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
@@ -235,6 +236,7 @@ export default function Group({ user, groupId }) {
                             Home
                         </Link>
                     </button>
+                    */}
 
                     <div className="flex flex-col md:flex-row items-center mt-12">
                         <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
@@ -345,6 +347,7 @@ export default function Group({ user, groupId }) {
                 >
                     Leave Group
                 </button>
+                {/*
                 <button
                     style={{'outline': 'none'}}
                     className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
@@ -353,6 +356,7 @@ export default function Group({ user, groupId }) {
                         Home
                     </Link>
                 </button>
+                */}
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
