@@ -12,22 +12,28 @@ export default function Home({ user }) {
         if (!user) {
             return
         }
-        function getFavArtist() {
-            axios.get("https://api.spotify.com/v1/me/top/artists").then(res => setArtists(res.data));
+        function getTopArtists() {
+            axios.get("https://api.spotify.com/v1/me/top/artists").then(res => setArtists(res.data.items));
         }
         getUserGroups(user.uid).then(val => {
             setGroups(val)
         })
-        safeAPI(user.uid, getFavArtist)
+        safeAPI(user.uid, getTopArtists)
     }, [])
+
+    if (!artists.length) {
+        return (
+            <div>Loading...</div>
+        )
+    }
     return (
         <div>
             {console.log(artists)}
-            {console.log(artists.items[0].name)}
+            {console.log(artists[0].name)}
             
-            <div>Your fav artist: {artists.items[0].name}</div>
-            <div>Artist Spotify Ranking: {artists.items[0].popularity}</div>
-            <img width="200px" height="200px" src={artists.items[0].images[0]['url']} alt={artists.items[0].name}></img>
+            <div>Your fav artist: {artists[0].name}</div>
+            <div>Artist Spotify Ranking: {artists[0].popularity}</div>
+            <img width="200px" height="200px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
 
             <div>
                 <p>Groups:</p>
