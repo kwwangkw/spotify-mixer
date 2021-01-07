@@ -5,7 +5,7 @@ import { safeAPI, signOut } from "../utils/auth"
 import { Link } from "gatsby"
 
 export default function Home({ user }) {
-    const [artists, setArtists] = useState("")
+    const [artists, setArtists] = useState([])
     const [groups, setGroups] = useState([])
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export default function Home({ user }) {
             return
         }
         function getFavArtist() {
-            axios.get("https://api.spotify.com/v1/me/top/artists").then(res => setArtists(res.data.items[0].name));
+            axios.get("https://api.spotify.com/v1/me/top/artists").then(res => setArtists(res.data));
         }
         getUserGroups(user.uid).then(val => {
             setGroups(val)
@@ -22,7 +22,13 @@ export default function Home({ user }) {
     }, [])
     return (
         <div>
-            <div>Your fav artist: {artists}</div>
+            {console.log(artists)}
+            {console.log(artists.items[0].name)}
+            
+            <div>Your fav artist: {artists.items[0].name}</div>
+            <div>Artist Spotify Ranking: {artists.items[0].popularity}</div>
+            <img width="200px" height="200px" src={artists.items[0].images[0]['url']} alt={artists.items[0].name}></img>
+
             <div>
                 <p>Groups:</p>
                 {groups.map(group => <div key={group.id}><Link to={`/app/group/${group.id}`}>{group.name}</Link></div>)}

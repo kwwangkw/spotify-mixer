@@ -214,8 +214,8 @@ export default function Group({ user, groupId }) {
                             <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
                         </button>
                     </div>
-                    <div className="text-gray-400 text-lg mb-12">
-                        <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}
+                    <div className="text-gray-400 text-lg mb-3">
+                    <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}   
                     </div>
                     <button
                         style={{'outline': 'none'}}
@@ -227,8 +227,16 @@ export default function Group({ user, groupId }) {
                     >
                         Leave Group
                     </button>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                    >
+                        <Link to={"/app/home"}>
+                            Home
+                        </Link>
+                    </button>
 
-                    <div className="flex flex-col md:flex-row items-center">
+                    <div className="flex flex-col md:flex-row items-center mt-12">
                         <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
                             <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-4xl">Ahhhh!</h2>
                             <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-4xl mb-16">You haven't created a playlist for this group yet- let's get started!</h2>
@@ -289,14 +297,6 @@ export default function Group({ user, groupId }) {
                             >
                                 Generate Playlist
                             </button>
-                            <button
-                                style={{'outline': 'none'}}
-                                className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                            >
-                                <Link to={"/app/home"}>
-                                    Home
-                                </Link>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -337,14 +337,6 @@ export default function Group({ user, groupId }) {
                 </div>
                 <button
                     style={{'outline': 'none'}}
-                    className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                >
-                    <Link to={"/app/home"}>
-                        Home
-                    </Link>
-                </button>
-                <button
-                    style={{'outline': 'none'}}
                     className="text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
                     onClick={async () => {
                         await leaveGroup(user.uid, groupId)
@@ -352,6 +344,14 @@ export default function Group({ user, groupId }) {
                     }}
                 >
                     Leave Group
+                </button>
+                <button
+                    style={{'outline': 'none'}}
+                    className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                >
+                    <Link to={"/app/home"}>
+                        Home
+                    </Link>
                 </button>
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
@@ -376,7 +376,7 @@ export default function Group({ user, groupId }) {
                     </button>
                 </div>
                 <div id="right" className="lg:w-full ml-5 md:ml-20 lg:ml-0 pr-5 md:pr-10 lg:pr-20">
-                    <div className="list-of-tracks w-full -mt-3">
+                    <div className="list-of-tracks w-full">
                         {playlistTracks && playlistTracks.map((track) => (
                             <a key={track.id} href={track.song_url} target="_blank" rel="noop  ener noreferrer">
                                 <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
