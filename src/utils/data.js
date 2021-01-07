@@ -47,6 +47,11 @@ async function getTopTracks(groupID, timeRange, limitPerPerson) {
     return topTracks
 }
 
+async function setGroup(groupID, group) {
+    const db = firebaseInst.firestore()
+    return db.collection(groupsCollection).doc(groupID).update(group)
+}
+
 async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, limitPerPerson) {
     const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
     console.log(topTracks)
@@ -57,13 +62,12 @@ async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, l
         uid,
         () => axios.post(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, requestBody),
     )
-
-    const db = firebaseInst.firestore()
-    return db.collection(groupsCollection).doc(groupID).update({
+    return setGroup(groupID, {
         playlist_id: playlistID,
         playlist_name: playlistName,
         time_range: timeRange,
-        limit_per_person: limitPerPerson
+        limit_per_person: limitPerPerson,
+        creator: uid,
     })
 }
 
@@ -86,23 +90,23 @@ async function getPlaylist(user, playlistId) {
     return playlist
 }
 
-async function getPlaylistOptions(groupID) {
+async function getPlaylistForGroup(groupID) {
     const db = firebaseInst.firestore()
     const snapshot = await db.collection(groupsCollection).doc(groupID).get()
     const data = snapshot.data()
-    return [data.time_range, data.limit_per_person]
+    return data
 }
 
-async function updatePlaylist(uid, groupID, playlistID) {
-    const [timeRange, limitPerPerson] = await getPlaylistOptions(groupID)
-    console.log(timeRange, limitPerPerson)
-    const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
+async function updatePlaylist(groupID, playlistID) {
+    const playlist = await getPlaylistForGroup(groupID)
+    const topTracks = await getTopTracks(groupID, playlist.time_range, playlist.limit_per_person)
     const requestBody = {
         uris: topTracks
     }
+    const creator = playlist.creator
     return safeAPI(
-        uid,
-        () => axios.put(`https://api.spotify.com/v1/users/${uid}/playlists/${playlistID}/tracks`, requestBody),
+        creator,
+        () => axios.put(`https://api.spotify.com/v1/users/${creator}/playlists/${playlistID}/tracks`, requestBody),
     )
 }
 
