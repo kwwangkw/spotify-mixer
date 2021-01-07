@@ -3,16 +3,9 @@ import axios from "axios"
 import firebaseInst from "../firebase"
 import { setAxiosTokenHeader } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
-import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser } from "../utils/data"
+import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser, leaveGroup } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
 import { Link, navigate, useScrollRestoration } from "gatsby"
-
-
-const tooltip = {
-    // color: "#232129",
-    // padding: "96px",
-    // fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
 
 const tooltiptext = {
     visibility: 'hidden',
@@ -27,20 +20,6 @@ const tooltiptext = {
     top: '-5px',
     left: '105%',
 }
-
-// const tooltiptext = {
-//     visibility: hidden,
-//     width: 120px,
-//     background-color: black,
-//     color: '#fff',
-//     text-align: center,
-//     padding: 5px 0,
-//     border-radius: 6px,
-    
-//     /* Position the tooltip text - see examples below! */
-//     position: 'absolute',
-//     zIndex: '1',
-// }
 
 export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
@@ -238,6 +217,16 @@ export default function Group({ user, groupId }) {
                     <div className="text-gray-400 text-lg mb-12">
                         <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}
                     </div>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                        onClick={async () => {
+                            await leaveGroup(user.uid, groupId)
+                            navigate("/app/home")
+                        }}
+                    >
+                        Leave Group
+                    </button>
 
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
@@ -354,6 +343,16 @@ export default function Group({ user, groupId }) {
                         Home
                     </Link>
                 </button>
+                <button
+                    style={{'outline': 'none'}}
+                    className="text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
+                    onClick={async () => {
+                        await leaveGroup(user.uid, groupId)
+                        navigate("/app/home")
+                    }}
+                >
+                    Leave Group
+                </button>
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
@@ -364,7 +363,7 @@ export default function Group({ user, groupId }) {
                             <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
                         </a>
                     </div>
-                        <h2 className="mb-10 text-gray-400 font-light mx-auto">{playlistTracks.length} Tracks from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}</h2>
+                        <h2 className="mb-10 text-gray-400 font-light mx-auto">{playlistTracks.length} Tracks {/*from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}*/}</h2>
                     <button
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
