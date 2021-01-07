@@ -369,8 +369,7 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
-                            // await updatePlaylist(user.uid, groupId, playlistID, timeRange, limitPerPerson)
-                            await updatePlaylist(user.uid, groupId, playlistID)
+                            await updatePlaylist(groupId, playlistID)
                             refreshPlaylist(playlistID)
                         }}
                     >
