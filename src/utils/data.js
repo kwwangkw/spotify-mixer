@@ -82,10 +82,10 @@ async function createAndFillPlaylist(user, groupID, playlistName, timeRange, lim
     return playlist.data
 }
 
-async function getPlaylist(user, playlistId) {
+async function getPlaylist(user, playlistID) {
     const playlist = await safeAPI(
         user.uid,
-        () => axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`)
+        () => axios.get(`https://api.spotify.com/v1/playlists/${playlistID}`)
     )
     return playlist
 }
@@ -134,6 +134,20 @@ async function joinGroup(user, groupId) {
     return ref.update("users", FieldValue.arrayUnion(user.uid));
 }
 
+async function leaveGroup(uid, groupId) {
+    const db = firebaseInst.firestore()
+    const doc = db.collection(groupsCollection).doc(groupId)
+    const docContents = await doc.get()
+    if (!docContents.exists) {
+        throw new Error("attempting to leave group that does not exist")
+    }
+    const data = docContents.data()
+    if (data.users && data.users.length === 1) {
+        return doc.delete()
+    }
+    return doc.update("users", FieldValue.arrayRemove(uid));
+}
+
 async function createGroup(user, groupName) {
     const db = firebaseInst.firestore()
     const docRef = await db.collection(groupsCollection).add({
@@ -171,4 +185,4 @@ async function getUser(uid) {
     return user.data
 }
 
-export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups, getUser }
+export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups, getUser, leaveGroup }
