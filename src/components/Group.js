@@ -155,7 +155,7 @@ export default function Group({ user, groupId }) {
     }
     if (!isInGroup) {
         return (
-            <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+            <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen">
                 <div className="w-full h-full flex flex-col justify-center text-center items-center">
                     <h1 className="text-white font-thin text-5xl mb-16">
                         You've been invited to join a Spotify Mixer group:
@@ -187,10 +187,10 @@ export default function Group({ user, groupId }) {
     }
     if (playlistLink === "") {
         return (
-            <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
+            <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen flex items-center justify-center p-5">
                 <div className="w-full h-full flex flex-col justify-center text-center items-center">
-                    <div className="flex flex-row">
-                        <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
+                    <div className="flex items-center justify-center flex-col md:flex-row">
+                        <h1 className="text-white font-medium text-4xl md:text-5xl mb-3">{groupName}<span></span></h1>
                         <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
                                 onClick={() => {
                                     copyToClipboard()
@@ -214,8 +214,8 @@ export default function Group({ user, groupId }) {
                             <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
                         </button>
                     </div>
-                    <div className="text-gray-400 text-lg mb-3">
-                    <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}   
+                    <div className="text-gray-400 text-md md:text-lg mb-3">
+                        <span> &#183; </span>{groupMembers.map(member => <span key={member.id}>{member.display_name} &#183; </span>)}   
                     </div>
                     <button
                         style={{'outline': 'none'}}
@@ -227,33 +227,22 @@ export default function Group({ user, groupId }) {
                     >
                         Leave Group
                     </button>
-                    {/*
-                    <button
-                        style={{'outline': 'none'}}
-                        className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                    >
-                        <Link to={"/app/home"}>
-                            Home
-                        </Link>
-                    </button>
-                    */}
 
                     <div className="flex flex-col md:flex-row items-center mt-12">
                         <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
-                            <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-4xl">Ahhhh!</h2>
-                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-4xl mb-16">You haven't created a playlist for this group yet- let's get started!</h2>
+                            <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-3xl md:text-4xl">Ahhhh!</h2>
+                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-3xl md:text-4xl mb-16">You haven't created a playlist for this group yet- let's get started!</h2>
                         </div>
 
-                        {/* FORM STUFF */}
                         <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
-                            <label className="text-primary-400 text-xl font-light">Playlist Name</label>
+                            <label className="text-primary-400 text-md md:text-xl font-light">Playlist Name</label>
                             <input 
                                 className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
                                 placeholder="e.g. Raining Whales"
                                 onChange={e => setPlaylistName(e.target.value)}
                             />
-                            <label className="text-primary-400 text-xl font-light">Tracks per Contributor</label>
-                            <div className="w-1/4">
+                            <label className="text-primary-400 text-md md:text-xl font-light">Tracks per Contributor</label>
+                            <div className="w-1/4 flex flex-col items-center">
                                 <input 
                                     type="number"
                                     min="1"
@@ -263,8 +252,8 @@ export default function Group({ user, groupId }) {
                                     className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
                                 />
                             </div>
-                            <label className="text-primary-400 text-xl font-light">Fav Songs From...</label>
-                            <div className="flex flex-row md:flex-col lg:flex-row mb-8 text-xl text-white font-thin text-center">
+                            <label className="text-primary-400 text-md md:text-xl font-light">Fav Songs From...</label>
+                            <div className="flex flex-col lg:flex-row mb-8 text-xl text-white font-thin text-left lg:text-center">
                                 <label className="mx-3">
                                     <input type="radio" name="size" id="short_term" value="short_term" checked={timeRange === "short_term"} onChange={e => setTimeRange(e.target.value)} />
                                     <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
@@ -309,7 +298,7 @@ export default function Group({ user, groupId }) {
     return (
         <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
             <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-12 lg:mb-20">
-                <div className="flex flex-row">
+                <div className="flex flex-col items-center justify-center md:flex-row">
                     <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
                     <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
                             onClick={() => {
