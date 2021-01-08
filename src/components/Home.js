@@ -8,6 +8,21 @@ export default function Home({ user }) {
     const [artists, setArtists] = useState([])
     const [tracks, setTracks] = useState([])
     const [groups, setGroups] = useState([])
+    
+    // function groupClasses(end, start) {
+    //     return "overflow-hidden p-4 bg-gradient-to-br from-gray-" + start + " to-gray-" + end + " h-40 text-gray-300 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light"
+    // }
+
+    // function colorGroup(groupName, index){
+    //     classes = [""]
+    //     return(
+    //         <li className="overflow-hidden p-4 bg-gradient-to-br from-gray-600 to-gray-700 h-40 text-gray-300 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light">
+    //             <div className="flex flex-col">
+    //                 <h2>{group.name}</h2>
+    //             </div>
+    //         </li>
+    //     )
+    // }
 
     useEffect(() => {
         if (!user) {
@@ -43,8 +58,8 @@ export default function Home({ user }) {
                 <h1 className="text-white text-4xl mb-3 text-center md:text-left">Personal Insights</h1>
                 <ul className="grid gap-4 grid-cols-1 md:gap-8">
                     <ul className="grid gap-4 grid-cols-1 lg:grid-cols-2 md:gap-8">
-                        <a href={artists[0].external_urls['spotify']} target="_blank">
-                            <li className="p-5 md:p-8 bg-gradient-to-br from-red-200 to-red-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
+                        <a href={artists[0].external_urls['spotify']} target="_blank" className="-mb-5 sm:-mb-10 lg:mb-0">
+                            <li className="p-5 md:p-8 bg-gradient-to-br from-pink-200 to-pink-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
                                 <img className="mr-4 rounded-full" width="130px" height="130px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
                                     <h3 >Your Top Artist</h3>
@@ -53,7 +68,7 @@ export default function Home({ user }) {
                                 </div>
                             </li>
                         </a>
-                        <a href={artists[0].external_urls['spotify']} target="_blank">
+                        <a href={artists[0].external_urls['spotify']} target="_blank" className="invisible lg:visible -mb-48 lg:mb-0">
                             <li className="p-5 md:p-8 bg-gradient-to-br from-indigo-200 to-indigo-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
                                 <img className="mr-4 rounded-full" width="130px" height="130px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
@@ -64,15 +79,15 @@ export default function Home({ user }) {
                             </li>
                         </a>
                     </ul>
-                    <ul className="grid gap-4 grid-cols-2 md:grid-cols-3 md:gap-8">
-                        <li className="p-3 bg-gradient-to-br from-primary-200 to-primary-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
-                        <li className="p-3 bg-gradient-to-br from-pink-200 to-pink-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
-                    <li className="p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
+                    <ul className="grid gap-4 grid-cols-1 lg:grid-cols-3 md:gap-8">
+                        <li className="visible -mb-44 lg:mb-0 p-3 bg-gradient-to-br from-cyan-200 to-cyan-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
+                        <li className="invisible lg:visible p-3 bg-gradient-to-br from-primary-200 to-primary-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
+                        <li className="invisible lg:visible p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
                     </ul>
                 </ul>
             </div>
 
-            <div id="groups" className="py-16">
+            <div id="groups" className="py-16 -mt-40 lg:mt-0">
                 <h1 className="text-white text-4xl mb-3 text-center md:text-left">Your Groups</h1>
                 <ul className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 md:gap-8">
                     {groups.map(group => 

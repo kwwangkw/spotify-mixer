@@ -384,20 +384,20 @@ export default function Group({ user, groupId }) {
                         {playlistTracks && playlistTracks.map((track) => (
                             <a key={track.id} href={track.song_url} target="_blank" rel="noop  ener noreferrer">
                                 <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
-                                <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
+                                    <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
                                     <div id="desc" className="w-full flex flex-col justify-center">
-                                        <div>
-                                            <div className="flex flex-row w-full justify-between">
-                                                <div className="pr-3">
-                                                    <p className="text-white mb-1 group-hover:underline">{track.name}</p>
-                                                </div>
-                                                <p className="text-gray-400 font-thin mb-1">{track.duration_min}:{track.duration_sec < 10 ? '0' : ""}{track.duration_sec}</p>
+                                        <div className="flex flex-row w-full justify-between">
+                                            <div className="w-44 md:w-96">
+                                                <p className="truncate text-white mb-1 group-hover:underline flex-none">{track.name}</p>
                                             </div>
-                                            <div className="pr-10">
+                                            <p className="text-gray-400 font-thin mb-1 flex-none">{track.duration_min}:{track.duration_sec < 10 ? '0' : ""}{track.duration_sec}</p>
+                                        </div>
+                                        <div className="w-44 md:w-96">
+                                            <p className="text-gray-400 truncate">
                                                 {track.artists && track.artists.map((artist, index) => (
                                                     <span key={index} className="text-gray-400">{artist} {(index + 1 === track.artists.length) ? "" : (<span>&#183;</span>)} </span>
                                                 ))}
-                                            </div>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
