@@ -31,7 +31,7 @@ export default function Home({ user }) {
         )
     }
     return (
-        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-8 md:px-16">
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-5 md:px-16">
             {console.log(artists)}
             {console.log(tracks)}
             <div className="flex flex-col justify-center text-center pt-16">
@@ -42,9 +42,9 @@ export default function Home({ user }) {
             <div id="insights">
                 <h1 className="text-white text-4xl mb-3">Personal Insights</h1>
                 <ul className="grid gap-4 grid-cols-1 md:gap-8">
-                    <ul className="grid gap-4 grid-cols-1 md:grid-cols-4 md:gap-8">
-                        <a href={artists[0].external_urls['spotify']} target="_blank" className="col-span-3">
-                            <li className="p-5 -mb-48 md:mb-0 md:p-8 bg-gradient-to-br from-primary-200 to-primary-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
+                    <ul className="grid gap-4 grid-cols-1 lg:grid-cols-2 md:gap-8">
+                        <a href={artists[0].external_urls['spotify']} target="_blank">
+                            <li className="p-5 md:p-8 bg-gradient-to-br from-red-200 to-red-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
                                 <img className="mr-4 rounded-full" width="140px" height="140px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
                                     <h3 >Your Top Artist</h3>
@@ -53,12 +53,8 @@ export default function Home({ user }) {
                                 </div>
                             </li>
                         </a>
-                        <li className="invisible md:visible p-3 bg-gradient-to-br from-red-200 to-red-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
-                    </ul>
-                    <ul className="grid gap-4 grid-cols-1 md:grid-cols-4 md:gap-8">
-                        <li className="invisible md:visible p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
-                        <a href={artists[0].external_urls['spotify']} target="_blank" className="col-span-3">
-                            <li className="p-5 -mt-48 md:mt-0 md:p-8 bg-gradient-to-br from-indigo-200 to-indigo-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
+                        <a href={artists[0].external_urls['spotify']} target="_blank">
+                            <li className="p-5 md:p-8 bg-gradient-to-br from-indigo-200 to-indigo-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
                                 <img className="mr-4 rounded-full" width="140px" height="140px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
                                     <h3 >Your Top Track</h3>
@@ -67,6 +63,11 @@ export default function Home({ user }) {
                                 </div>
                             </li>
                         </a>
+                    </ul>
+                    <ul className="grid gap-4 grid-cols-2 lg:grid-cols-3 md:gap-8">
+                        <li className="p-3 bg-gradient-to-br from-primary-200 to-primary-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
+                        <li className="p-3 bg-gradient-to-br from-pink-200 to-pink-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
+                    <li className="p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
                     </ul>
                 </ul>
             </div>
