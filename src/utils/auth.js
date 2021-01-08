@@ -1,6 +1,6 @@
 import axios from "axios"
 import firebaseInst from "../firebase"
-import { usersCollection } from "../utils/constants"
+import { usersCollection, profileURI } from "../utils/constants"
 
 function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
     const db = firebaseInst.firestore()
@@ -53,5 +53,22 @@ async function signOut() {
     }
 }
 
+async function getFirebaseToken() {
+    const spotifyID = await axios.get(profileURI).then(res => res.data.id)
+    try {
+        const res = await axios.post(`${process.env.SERVER_URI}/token`, {spotifyID: spotifyID})
+        return firebaseInst.auth().signInWithCustomToken(res.data.firebaseToken)
+    } catch(err) {
+        console.log(err)
+    }
+}
 
-export { setUserTokens, safeAPI, setAxiosTokenHeader, signOut }
+async function loginWithSpotify(code, other_redir) {
+    const res = await axios.post(`${process.env.SERVER_URI}/spotify/token`, { code: code, other_redir: other_redir })
+    const [ accessToken, refreshToken, expiresIn ] = [ res.data.access_token, res.data.refresh_token, res.data.expires_in ]
+    setAxiosTokenHeader(accessToken)
+    const user = await getFirebaseToken()
+    return setUserTokens(user.user.uid, accessToken, refreshToken, expiresIn)
+}
+
+export { setUserTokens, safeAPI, setAxiosTokenHeader, signOut, loginWithSpotify }
