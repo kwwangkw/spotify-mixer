@@ -31,7 +31,7 @@ export default function Home({ user }) {
         )
     }
     return (
-        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-5 md:px-16">
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-5 md:px-10 lg:px-16">
             {console.log(artists)}
             {console.log(tracks)}
             <div className="flex flex-col justify-center text-center pt-16">
@@ -40,31 +40,31 @@ export default function Home({ user }) {
             </div>
             
             <div id="insights">
-                <h1 className="text-white text-4xl mb-3">Personal Insights</h1>
+                <h1 className="text-white text-4xl mb-3 text-center md:text-left">Personal Insights</h1>
                 <ul className="grid gap-4 grid-cols-1 md:gap-8">
                     <ul className="grid gap-4 grid-cols-1 lg:grid-cols-2 md:gap-8">
                         <a href={artists[0].external_urls['spotify']} target="_blank">
                             <li className="p-5 md:p-8 bg-gradient-to-br from-red-200 to-red-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
-                                <img className="mr-4 rounded-full" width="140px" height="140px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
+                                <img className="mr-4 rounded-full" width="130px" height="130px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
                                     <h3 >Your Top Artist</h3>
                                     <h3 className="md:text-4xl text-dark-gray my-1">{artists[0].name}</h3>
-                                    <h4 className="text-2xl text-white">Spotify Ranking: {artists[0].popularity}</h4>
+                                    <h4 className="text-2xl text-white">Ranking: {artists[0].popularity}</h4>
                                 </div>
                             </li>
                         </a>
                         <a href={artists[0].external_urls['spotify']} target="_blank">
                             <li className="p-5 md:p-8 bg-gradient-to-br from-indigo-200 to-indigo-400 h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white">
-                                <img className="mr-4 rounded-full" width="140px" height="140px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
+                                <img className="mr-4 rounded-full" width="130px" height="130px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
                                 <div>
                                     <h3 >Your Top Track</h3>
                                     <h3 className="text-4xl text-dark-gray my-1">{artists[0].name}</h3>
-                                    <h4 className="text-2xl text-white">Spotify Ranking: {artists[0].popularity}</h4>
+                                    <h4 className="text-2xl text-white">Ranking: {artists[0].popularity}</h4>
                                 </div>
                             </li>
                         </a>
                     </ul>
-                    <ul className="grid gap-4 grid-cols-2 lg:grid-cols-3 md:gap-8">
+                    <ul className="grid gap-4 grid-cols-2 md:grid-cols-3 md:gap-8">
                         <li className="p-3 bg-gradient-to-br from-primary-200 to-primary-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
                         <li className="p-3 bg-gradient-to-br from-pink-200 to-pink-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
                     <li className="p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white"></li>
@@ -73,7 +73,7 @@ export default function Home({ user }) {
             </div>
 
             <div id="groups" className="py-16">
-                <h1 className="text-white text-4xl mb-3">Your Groups</h1>
+                <h1 className="text-white text-4xl mb-3 text-center md:text-left">Your Groups</h1>
                 <ul className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 md:gap-8">
                     {groups.map(group => 
                         <div key={group.id}>
