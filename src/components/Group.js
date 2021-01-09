@@ -1,38 +1,21 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
-import firebaseInst from "../firebase"
-import { setAxiosTokenHeader } from "../utils/auth"
-import { groupsCollection, usersCollection } from "../utils/constants"
 import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser, leaveGroup } from "../utils/data"
-import { safeAPI, signOut } from "../utils/auth"
-import { Link, navigate, useScrollRestoration } from "gatsby"
-
-const tooltiptext = {
-    visibility: 'hidden',
-    width: '120px',
-    backgroundColor: 'black',
-    color: '#fff',
-    textAlign: 'center',
-    padding: '5px 0',
-    borderRadius: '6px',
-    position: 'absolute',
-    zIndex: '1',
-    top: '-5px',
-    left: '105%',
-}
+import { Link, navigate } from "gatsby"
+import LoadingScreen from "./LoadingScreen"
+import spinningCircle from "../images/spinning-circles.svg"
 
 export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
-    const [groupName, setGroupName] = useState("")
+    const [groupName, setGroupName] =   useState("")
     const [playlistID, setPlaylistID] = useState(null)
     const [playlistLink, setPlaylistLink] = useState("")
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImageLink, setPlaylistImageLink] = useState("")
     const [groupMembers, setGroupMembers] = useState([])
     const [isCopied, setIsCopied] = useState(false)
-    const [nullMessage, setNullMessage] = useState("Loading...")
     const [playlistTracks, setPlaylistTracks] = useState([])
     const [timeoutID, setTimeoutID] = useState(null)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     // For generate playlist form
     const DEFAULT_LIMIT_PER_PERSON = 3
@@ -110,6 +93,7 @@ export default function Group({ user, groupId }) {
 
     useEffect(() => {
         async function func() {
+            setIsLoaded(false);
             if (!user) {
                 return
             }
@@ -117,9 +101,6 @@ export default function Group({ user, groupId }) {
             checkIsInGroup(user, groupId).then(val => {
                 if (val !== null) {
                     setIsInGroup(val)
-                }
-                else {
-                    setNullMessage("Invalid groupId")
                 }
             })
 
@@ -142,15 +123,14 @@ export default function Group({ user, groupId }) {
                     refreshPlaylist(group.playlist_id)
                 }
             }
+            setIsLoaded(true);
         }
         func()
     }, [])
 
-    if (isInGroup === null) {
+    if (isInGroup === null || !isLoaded) {
         return (
-            <div>
-                {nullMessage}
-            </div>
+            <LoadingScreen />
         )
     }
     if (!isInGroup) {
@@ -290,7 +270,7 @@ export default function Group({ user, groupId }) {
                                         setPlaylistID(playlist.id)
                                         setPlaylistLink(playlist.external_urls.spotify)
                                         refreshPlaylist(playlist.id)
-                                    } catch(e){
+                                    } catch(e) {
                                         if (e !== "invalid input") {
                                             throw e
                                         }
@@ -298,6 +278,9 @@ export default function Group({ user, groupId }) {
                                     }
                                 }}
                             >
+                                <svg className="animateSpin">
+                                    
+                                </svg>
                                 Generate Playlist
                             </button>
                         </div>
@@ -348,16 +331,6 @@ export default function Group({ user, groupId }) {
                 >
                     Leave Group
                 </button>
-                {/*
-                <button
-                    style={{'outline': 'none'}}
-                    className="py-1 text-white font bg-gray-500 text-center font-semibold rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                >
-                    <Link to={"/app/home"}>
-                        Home
-                    </Link>
-                </button>
-                */}
             </div>
             <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">

@@ -3,26 +3,12 @@ import axios from "axios"
 import { getUserGroups } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
 import { Link } from "gatsby"
+import LoadingScreen from "./LoadingScreen"
 
 export default function Home({ user }) {
     const [artists, setArtists] = useState([])
     const [tracks, setTracks] = useState([])
     const [groups, setGroups] = useState([])
-    
-    // function groupClasses(end, start) {
-    //     return "overflow-hidden p-4 bg-gradient-to-br from-gray-" + start + " to-gray-" + end + " h-40 text-gray-300 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light"
-    // }
-
-    // function colorGroup(groupName, index){
-    //     classes = [""]
-    //     return(
-    //         <li className="overflow-hidden p-4 bg-gradient-to-br from-gray-600 to-gray-700 h-40 text-gray-300 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light">
-    //             <div className="flex flex-col">
-    //                 <h2>{group.name}</h2>
-    //             </div>
-    //         </li>
-    //     )
-    // }
 
     useEffect(() => {
         if (!user) {
@@ -42,9 +28,7 @@ export default function Home({ user }) {
     }, [])
 
     if (!artists.length) {
-        return (
-            <div>Loading...</div>
-        )
+        return <LoadingScreen/>
     }
     return (
         <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-8 md:px-10 lg:px-16">
@@ -159,39 +143,8 @@ export default function Home({ user }) {
                             +
                         </li>
                     </Link>
-                    {/*
-                    <li className="p-3 bg-gradient-to-br from-indigo-200 to-indigo-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white">Kevin's Test Group</li>
-                    <li className="p-3 bg-gradient-to-br from-green-200 to-green-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white">Richard and Kevin's</li>
-                    <li className="p-3 bg-gradient-to-br from-blue-200 to-blue-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white">super long name test group yup</li>
-                    <li className="p-3 bg-gradient-to-br from-red-200 to-red-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white">Update Testing</li>
-                    <li className="p-3 bg-gradient-to-br from-yellow-200 to-yellow-400 h-40 rounded-2xl flex justify-center items-center text-center text-4xl text-white">Kev F's Group</li>
-                    */}
                 </ul>
             </div>
-            
-
-            {/*
-            <div>Your fav artist: <a href={artists[0].external_urls['spotify']} target="_blank">{artists[0].name}</a></div>
-            <div>Artist Spotify Ranking: {artists[0].popularity}</div>
-            <img width="200px" height="200px" src={artists[0].images[0]['url']} alt={artists[0].name}></img>
-
-            <div>
-                <p>Groups:</p>
-                {groups.map(group => <div key={group.id}><Link to={`/app/group/${group.id}`}>{group.name}</Link></div>)}
-            </div>
-            <button>
-                <Link to={"/app/newg"}>
-                    New Group
-                </Link>
-            </button>
-            <br/>
-            <button
-                className="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
-                onClick={signOut}
-            >
-                Log Out
-            </button>
-            */}
-        </div>
+       </div>
     )
 }
