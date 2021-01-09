@@ -210,8 +210,8 @@ export default function Group({ user, groupId }) {
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />  
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                                 </svg>
-                            <span className={`${ !isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
-                            <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
+                            <span className={`${ !isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible `} style={{'top': '2px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
+                            <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '2px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
                         </button>
                     </div>
                     <div className="text-gray-400 text-md md:text-lg mb-3">
@@ -231,7 +231,19 @@ export default function Group({ user, groupId }) {
                     <div className="flex flex-col md:flex-row items-center mt-12">
                         <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
                             <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-3xl md:text-4xl">Ahhhh!</h2>
-                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-3xl md:text-4xl mb-16">You haven't created a playlist for this group yet- let's get started!</h2>
+                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-3xl md:text-4xl">You haven't created a playlist for this group yet- let's get started!</h2>
+                            <button
+                                style={{'outline': 'none'}}
+                                className="invisible md:visible md:mr-5 text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-16 hover:bg-primary-500 transition duration-300 ease-in-out"
+                                onClick={async () => {
+                                    copyToClipboard()
+                                    setIsCopied(true)
+                                    setCopyTimeout(1000)
+                                }}
+                            >
+                                Invite Friends
+                                <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
+                            </button>
                         </div>
 
                         <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
@@ -319,8 +331,8 @@ export default function Group({ user, groupId }) {
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />  
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
-                        <span className={`${ !isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
-                        <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '15px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
+                        <span className={`${ !isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin invisible ml-1 group-hover:visible `} style={{'top': '2px', 'left' : '110%', 'width': '120px'}}>Copy Invite Link</span>
+                        <span className={`${ isCopied ? `block` : `hidden` } absolute z-1 text-xs text-left font-thin ml-1 `} style={{'top': '2px', 'left' : '110%', 'width': '120px'}}>Copied!</span>
                     </button>
                 </div>
                 <div className="text-gray-400 text-lg mb-3">
@@ -351,9 +363,13 @@ export default function Group({ user, groupId }) {
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
                     <div className="group">
                         <a href={playlistLink} target="_blank">
-                            <img width="300" height="300" className="relative mb-2 flex-shrink-0" src={playlistImageLink} />
-                            {/* <div className="absolute z-2 bg-primary-400" style={{'width': '300', 'height': '300'}}></div> */}
-                            <h2 className="mb-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
+                            <div className="grid grid-cols-1 group">
+                                <img width="300" height="300" className="z-0 relative col-start-1 row-start-1" src={playlistImageLink} />
+                                <div className="z-10 bg-opacity-0 group-hover:bg-opacity-25 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out bg-light-gray col-start-1 row-start-1 w-full h-full flex items-center justify-center">
+                                    <svg className="text-primary-300" xmlns="https://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                </div>
+                            </div>
+                            <h2 className="my-2 text-white font-medium font-2xl group-hover:underline">{playlistName}</h2>
                         </a>
                     </div>
                         <h2 className="mb-10 text-gray-400 font-light mx-auto">{playlistTracks.length} Tracks {/*from {groupMembers.length} {groupMembers.length === 1 ?'Contributor' : 'Contributors'}*/}</h2>
@@ -367,6 +383,18 @@ export default function Group({ user, groupId }) {
                     >
                         Update Playlist
                     </button>
+                    <button
+                                style={{'outline': 'none'}}
+                                className="text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-16 hover:bg-primary-500 transition duration-300 ease-in-out"
+                                onClick={async () => {
+                                    copyToClipboard()
+                                    setIsCopied(true)
+                                    setCopyTimeout(1000)
+                                }}
+                            >
+                                Invite Friends
+                                <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
+                            </button>
                 </div>
                 <div id="right" className="lg:w-full ml-5 md:ml-20 lg:ml-0 pr-5 md:pr-10 lg:pr-20">
                     <div className="list-of-tracks w-full">

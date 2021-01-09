@@ -47,7 +47,7 @@ export default function Home({ user }) {
         )
     }
     return (
-        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-5 md:px-10 lg:px-16">
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-8 md:px-10 lg:px-16">
             {console.log(artists)}
             {console.log(tracks)}
             <div className="flex flex-col justify-center text-center pt-16">
@@ -65,7 +65,7 @@ export default function Home({ user }) {
                                 <div className="truncate w-4/5">
                                     <h3 className="">Your Top Artist</h3>
                                     <h3 className="md:text-4xl text-dark-gray my-1">{artists[0].name}</h3>
-                                    <h4 className="text-2xl text-white">Ranking: {artists[0].popularity}</h4>
+                                    {/* <h4 className="text-2xl text-white">Ranking: {artists[0].popularity}</h4> */}
                                 </div>
                             </li>
                         </a>
@@ -75,7 +75,7 @@ export default function Home({ user }) {
                                 <div className="truncate w-4/5">
                                     <h3 className="">Your Runner-up Artist</h3>
                                     <h3 className="text-4xl text-dark-gray my-1">{artists[1].name}</h3>
-                                    <h4 className="text-2xl text-white">Ranking: {artists[1].popularity}</h4>
+                                    {/* <h4 className="text-2xl text-white">Ranking: {artists[1].popularity}</h4> */}
                                 </div>
                             </li>
                         </a>
@@ -90,7 +90,7 @@ export default function Home({ user }) {
                                         <h3 className="text-4xl text-dark-gray my-1">{tracks[0].name}</h3>
                                         <div className="flex flex-row">
                                             {tracks[0] && tracks[0].artists.map((artist, index) => (
-                                                <h3 key={index} className="text-2xl text-white">{artist.name}{(index + 1 === tracks[0].artists.length) ? "" : (<span>&#183;</span>)} </h3>
+                                                <h3 key={index} className="text-xl text-white">{artist.name}{(index + 1 === tracks[0].artists.length) ? "" : (<span>&thinsp; &#183; &thinsp;</span>)} </h3>
                                             ))}
                                         </div> 
                                     </div>
@@ -106,7 +106,7 @@ export default function Home({ user }) {
                                         <h3 className="text-4xl text-dark-gray my-1">{tracks[1].name}</h3>
                                         <div className="flex flex-row">
                                             {tracks[1] && tracks[1].artists.map((artist, index) => (
-                                                <h3 key={index} className="text-2xl text-white">{artist.name}{(index + 1 === tracks[1].artists.length) ? "" : (<span>&#183;</span>)} </h3>
+                                                <h3 key={index} className="text-xl text-white">{artist.name}{(index + 1 === tracks[1].artists.length) ? "" : (<span>&thinsp; &#183; &thinsp;</span>)} </h3>
                                             ))}
                                         </div> 
                                     </div>
@@ -123,7 +123,7 @@ export default function Home({ user }) {
                                     <div className="w-56 md:w-96 lg:w-72">
                                         <p className="flex flex-row">
                                             {tracks[2] && tracks[2].artists.map((artist, index) => (
-                                                <h3 key={index} className="text-2xl text-white">{artist.name}{(index + 1 === tracks[2].artists.length) ? "" : (<span>&#183;</span>)} </h3>
+                                                <h3 key={index} className="text-xl text-white">{artist.name}{(index + 1 === tracks[2].artists.length) ? "" : (<span>&thinsp; &#183; &thinsp;</span>)} </h3>
                                             ))}
                                         </p>
                                     </div> 

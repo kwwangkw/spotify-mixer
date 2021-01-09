@@ -17,6 +17,7 @@ module.exports = {
         "light-gray": '#212121',
         "primary": colors.emerald,
         "cyan": colors.cyan,
+        "violet": colors.violet,
       },
       opacity: {
         '15' : '.15',
