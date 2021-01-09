@@ -123,7 +123,7 @@ export default function Home({ user }) {
                                     <div className="w-56 md:w-96 lg:w-72">
                                         <p className="flex flex-row">
                                             {tracks[2] && tracks[2].artists.map((artist, index) => (
-                                                <h3 key={index} className="text-xl text-white">{artist.name}{(index + 1 === tracks[2].artists.length) ? "" : (<span>&thinsp; &#183; &thinsp;</span>)} </h3>
+                                                <span key={index} className="text-xl text-white">{artist.name}{(index + 1 === tracks[2].artists.length) ? "" : (<span>&thinsp; &#183; &thinsp;</span>)} </span>
                                             ))}
                                         </p>
                                     </div> 
@@ -141,7 +141,7 @@ export default function Home({ user }) {
                     {groups.map(group => 
                         <div key={group.id}>
                             <Link to={`/app/group/${group.id}`}>
-                                <li className="break-words overflow-hidden p-4 bg-gradient-to-br from-gray-600 to-gray-700 h-40 text-gray-300 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light">
+                                <li className="break-words overflow-hidden p-4 bg-gradient-to-br from-gray-600 to-gray-700 h-40 text-gray-200 transform hover:scale-105 transition duration-400 ease-in-out rounded-xl flex justify-center items-center text-center text-4xl font-light">
                                     <div className="flex flex-col">
                                         <h2>{group.name}</h2>
                                     </div>

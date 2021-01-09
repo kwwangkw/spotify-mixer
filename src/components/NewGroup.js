@@ -18,7 +18,7 @@ export default function NewGroup({ user }) {
             <div className="w-full h-full flex flex-col justify-center text-center items-center">
                 <div className="border-2 border-transparent rounded-3xl">
                     <h1 className="flex flex-col md:flex-row text-primary-400 font-semi-bold text-5xl mb-16 mx-auto">Start Exploring: <span className="text-white font-thin text-5xl md:mb-10">Create a Group</span></h1>
-                    <div class="w-8/12 md:w-5/12 mx-auto">
+                    <div className="w-8/12 md:w-5/12 mx-auto">
                         <input 
                             className="text-2xl md:text-3xl bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 
                             placeholder="Your Group's Name" 
