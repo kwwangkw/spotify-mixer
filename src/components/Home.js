@@ -35,7 +35,7 @@ export default function Home({ user }) {
             {console.log(artists)}
             {console.log(tracks)}
             <div className="flex flex-col justify-center text-center pt-16">
-                <h1 className="text-primary-400 text-4xl mb-2">Welcome {user.uid},</h1>
+                <h1 className="text-primary-400 text-4xl mb-2">Welcome {user.display_name},</h1>
                 <h1 className="text-gray-400 text-5xl mb-16">Let's discover some music!</h1>
             </div>
             
