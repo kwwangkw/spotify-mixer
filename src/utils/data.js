@@ -3,9 +3,9 @@ import firebaseInst, { FieldValue } from "../firebase"
 import { safeAPI } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 
-async function createPlaylist(uid, name) {
+async function createPlaylist(uid, playlistName) {
     let requestBody = {
-        name: name,
+        name: playlistName,
         public: false,
         collaborative: true,
     }
@@ -15,7 +15,7 @@ async function createPlaylist(uid, name) {
     )
 }
 
-async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson) {
+async function getTopTracks(groupID, timeRange, limitPerPerson) {
     const db = firebaseInst.firestore()
     const groupRef = db.collection(groupsCollection).doc(groupID)
     const doc = await groupRef.get()
@@ -44,6 +44,17 @@ async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson)
             console.log(err)
         }
     }
+    return topTracks
+}
+
+async function setGroup(groupID, group) {
+    const db = firebaseInst.firestore()
+    return db.collection(groupsCollection).doc(groupID).update(group)
+}
+
+async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, limitPerPerson) {
+    const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
+    console.log(topTracks)
     const requestBody = {
         uris: topTracks
     }
@@ -51,21 +62,52 @@ async function fillPlaylist(uid, groupID, playlistID, timeRange, limitPerPerson)
         uid,
         () => axios.post(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, requestBody),
     )
-    return groupRef.update("playlist_id", playlistID)
+    return setGroup(groupID, {
+        playlist_id: playlistID,
+        playlist_name: playlistName,
+        time_range: timeRange,
+        limit_per_person: limitPerPerson,
+        creator: uid,
+    })
 }
 
-async function createAndFillPlaylist(user, groupID, name, timeRange, limitPerPerson) {
-    const playlist = await createPlaylist(user.uid, name)
-    fillPlaylist(user.uid, groupID, playlist.data.id, timeRange, limitPerPerson)
-    return playlist.data // id, link will be correct but tracks will not be up to date
+async function createAndFillPlaylist(user, groupID, playlistName, timeRange, limitPerPerson) {
+    if (!playlistName || !["short_term", "medium_term", "long_term"].includes(timeRange) || 
+        !Number.isInteger(limitPerPerson) || limitPerPerson <= 0 || limitPerPerson > 50) {
+        throw "invalid input"
+    }
+    const playlist = await createPlaylist(user.uid, playlistName)
+    await fillPlaylist(user.uid, groupID, playlistName, playlist.data.id, timeRange, limitPerPerson)
+
+    return playlist.data
 }
 
-async function getPlaylist(user, playlistId) {
+async function getPlaylist(user, playlistID) {
     const playlist = await safeAPI(
         user.uid,
-        () => axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`)
+        () => axios.get(`https://api.spotify.com/v1/playlists/${playlistID}`)
     )
     return playlist
+}
+
+async function getPlaylistForGroup(groupID) {
+    const db = firebaseInst.firestore()
+    const snapshot = await db.collection(groupsCollection).doc(groupID).get()
+    const data = snapshot.data()
+    return data
+}
+
+async function updatePlaylist(groupID, playlistID) {
+    const playlist = await getPlaylistForGroup(groupID)
+    const topTracks = await getTopTracks(groupID, playlist.time_range, playlist.limit_per_person)
+    const requestBody = {
+        uris: topTracks
+    }
+    const creator = playlist.creator
+    return safeAPI(
+        creator,
+        () => axios.put(`https://api.spotify.com/v1/users/${creator}/playlists/${playlistID}/tracks`, requestBody),
+    )
 }
 
 async function checkIsInGroup(user, groupId) {
@@ -92,6 +134,20 @@ async function joinGroup(user, groupId) {
     return ref.update("users", FieldValue.arrayUnion(user.uid));
 }
 
+async function leaveGroup(uid, groupId) {
+    const db = firebaseInst.firestore()
+    const doc = db.collection(groupsCollection).doc(groupId)
+    const docContents = await doc.get()
+    if (!docContents.exists) {
+        throw new Error("attempting to leave group that does not exist")
+    }
+    const data = docContents.data()
+    if (data.users && data.users.length === 1) {
+        return doc.delete()
+    }
+    return doc.update("users", FieldValue.arrayRemove(uid));
+}
+
 async function createGroup(user, groupName) {
     const db = firebaseInst.firestore()
     const docRef = await db.collection(groupsCollection).add({
@@ -100,7 +156,7 @@ async function createGroup(user, groupName) {
         users: [user.uid],
     })
     db.collection(usersCollection).doc(user.uid).update("groups", FieldValue.arrayUnion(docRef.id))
-    return `${process.env.BASE_URI}/app/group/${docRef.id}`
+    return `/app/group/${docRef.id}`
 }
 
 async function getGroup(groupId) {
@@ -121,4 +177,12 @@ async function getUserGroups(uid) {
     return userGroups
 }
 
-export { createAndFillPlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups }
+async function getUser(uid) {
+    const user = await safeAPI(
+        uid,
+        () => axios.get(`https://api.spotify.com/v1/users/${uid}`),
+    )
+    return user.data
+}
+
+export { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, createGroup, getGroup, getUserGroups, getUser, leaveGroup }

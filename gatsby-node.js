@@ -1,5 +1,5 @@
 exports.onCreatePage = async ({ page, actions }) => {
-  const { createPage } = actions
+  const { createPage, createRedirect } = actions
 
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
@@ -9,4 +9,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+
+  createRedirect({
+    fromPath: `/`,
+    toPath: `/app/home`,
+    redirectInBrowser: true,
+    isPermanent: true,
+  })
 }
