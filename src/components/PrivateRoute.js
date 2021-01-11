@@ -3,6 +3,8 @@ import PropTypes from "prop-types"
 import { navigate } from "gatsby"
 import firebaseInst from "../firebase"
 import { getUser } from "../utils/data"
+import { projectTitle } from "../utils/constants";
+import SEO from "./seo";
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const [page, setPage] = useState(null)
@@ -25,7 +27,12 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         user = {...user, ...spotifyUser}
         console.log("SIGNED IN!")
         console.log(user)
-        setPage(<Component {...rest} user={user} />)
+        setPage(
+          <div>
+            <SEO title={projectTitle} />
+            <Component {...rest} user={user} />
+          </div>
+        )
     })
     return unsubscribe
   }, [])
