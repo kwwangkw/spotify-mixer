@@ -28,8 +28,8 @@ export default function MagicWand() {
                 <polygon id="burst4" className="burst" points="61.353,52.152 59.64,57.517 62.493,57.746 "/>
                 <polygon id="burst5" className="burst" points="73.681,42.562 79.616,43.704 78.361,45.874 "/>
             </svg>
-            <p className="text-white text-2xl text-center">Hold on tight!</p> 
-            <p className="text-white text-2xl text-center">We're working our magic to get you your playlist!</p>
+            <p className="text-white text-3xl text-center font-light">Hold on tight!</p> 
+            <p className="text-white text-3xl text-center font-light">We're working our magic to get you your playlist!</p>
         </div>
     )
 }
