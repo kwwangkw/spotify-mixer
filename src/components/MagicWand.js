@@ -4,7 +4,7 @@ import "./styles/magicwand.css"
 
 export default function MagicWand() {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center font-sans px-8">
 
             <svg version="1.1" className="clicked fill-current text-dark-gray" id="magicwand" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
             width="200px" height="200px" viewBox="0 0 100 100" style={{'enableBackground':'new 0 0 100 100'}}>
@@ -28,7 +28,8 @@ export default function MagicWand() {
                 <polygon id="burst4" className="burst" points="61.353,52.152 59.64,57.517 62.493,57.746 "/>
                 <polygon id="burst5" className="burst" points="73.681,42.562 79.616,43.704 78.361,45.874 "/>
             </svg>
-            <p className="text-white">Hold on tight! We're working our magic to get you your playlist!</p>
+            <p className="text-white text-2xl text-center">Hold on tight!</p> 
+            <p className="text-white text-2xl text-center">We're working our magic to get you your playlist!</p>
         </div>
     )
 }

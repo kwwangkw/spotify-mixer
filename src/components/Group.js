@@ -273,7 +273,6 @@ export default function Group({ user, groupId }) {
                                         try {
                                             setIsGen(true)
                                             const playlist = await createAndFillPlaylist(user, groupId, playlistName, timeRange, limitPerPerson)
-                                            console.log(playlist)
                                             setPlaylistID(playlist.id)
                                             setPlaylistLink(playlist.external_urls.spotify)
                                             refreshPlaylist(playlist.id)
@@ -293,10 +292,9 @@ export default function Group({ user, groupId }) {
                     </div>
                     )}
                     {isGen && (<MagicWand />)}
-                  </div>
-
                 </div>
-            )
+            </div>
+        )
     }
 
     return (
