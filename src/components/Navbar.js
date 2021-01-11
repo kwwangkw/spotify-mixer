@@ -13,7 +13,8 @@ export default function Navbar({user}) {
         getUser(user.uid).then(val => {
             setDisplayName(val.display_name)
             if (!val.images || val.images.length == 0)
-                setProfilePicture("https://o.dlf.pt/dfpng/smallpng/276-2761324_transparent-default-avatar-png-profile-no-image-icon.png")
+                //setProfilePicture("https://o.dlf.pt/dfpng/smallpng/276-2761324_transparent-default-avatar-png-profile-no-image-icon.png")
+                setProfilePicture("https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80")
             else
                 setProfilePicture(val.images[0].url)
         })

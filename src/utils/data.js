@@ -54,7 +54,6 @@ async function setGroup(groupID, group) {
 
 async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, limitPerPerson) {
     const topTracks = await getTopTracks(groupID, timeRange, limitPerPerson)
-    console.log(topTracks)
     const requestBody = {
         uris: topTracks
     }
