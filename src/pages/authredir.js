@@ -5,13 +5,15 @@ import { loginWithSpotify } from "../utils/auth"
 
 export default function AuthPageRedir({ location }) {
     const { code } = queryString.parse(location.search);
-    const redirectTo = sessionStorage.getItem("redirectTo")
-    sessionStorage.removeItem("redirectTo")
     
     useEffect(() => {
-        loginWithSpotify(code, true).then(() => {
-            navigate(redirectTo)
-        })
+        if (typeof window !== "undefined") {
+            const redirectTo = sessionStorage.getItem("redirectTo")
+            sessionStorage.removeItem("redirectTo")
+            loginWithSpotify(code, true).then(() => {
+                navigate(redirectTo)
+            })
+        }
     }, [code])
     return null
 }

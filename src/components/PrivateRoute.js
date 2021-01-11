@@ -9,7 +9,10 @@ import SEO from "./seo";
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const [page, setPage] = useState(null)
   useEffect(() => {
-    const unsubscribe = firebaseInst.auth().onAuthStateChanged(async user => {
+    const unsubscribe = firebaseInst.auth.onAuthStateChanged(async user => {
+        if (typeof window === "undefined") {
+          return
+        }
         const locationPath = location.pathname
         if (user === null && locationPath !== "/app/login") {
             if (/^\/app\/group\//.test(locationPath)) {

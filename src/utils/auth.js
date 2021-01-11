@@ -3,7 +3,7 @@ import firebaseInst, { FieldValue } from "../firebase"
 import { usersCollection, profileURI } from "../utils/constants"
 
 function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
-    const db = firebaseInst.firestore()
+    const db = firebaseInst.firestore
     const secondsSince1970 = new Date().getTime() / 1000
     return db.collection(usersCollection)
         .doc(uid)
@@ -27,7 +27,7 @@ async function getNewAccessToken(uid, refreshToken) {
 }
 
 async function getUserData(uid) {
-    const db = firebaseInst.firestore()
+    const db = firebaseInst.firestore
     const userRef = db.collection(usersCollection).doc(uid)
     const userDoc = await userRef.get()
     return userDoc.data()
@@ -48,7 +48,7 @@ async function safeAPI(uid, func) {
 
 async function signOut() {
     try {
-        firebaseInst.auth().signOut()
+        firebaseInst.auth.signOut()
     } catch (error) {
         console.error(error)
     }
@@ -58,7 +58,7 @@ async function getFirebaseToken() {
     const spotifyID = await axios.get(profileURI).then(res => res.data.id)
     try {
         const res = await axios.post(`${process.env.SERVER_URI}/token`, {spotifyID: spotifyID})
-        return firebaseInst.auth().signInWithCustomToken(res.data.firebaseToken)
+        return firebaseInst.auth.signInWithCustomToken(res.data.firebaseToken)
     } catch(err) {
         console.log(err)
     }
