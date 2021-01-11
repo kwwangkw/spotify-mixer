@@ -4,13 +4,13 @@ import "firebase/firestore";
 import "firebase/auth";
 
 var firebaseConfig = {
-    apiKey: "AIzaSyBbNNFr0islloydHYfQMXphnUR1J0WutVQ",
-    authDomain: "spotify-mixer-7dff8.firebaseapp.com",
-    projectId: "spotify-mixer-7dff8",
-    storageBucket: "spotify-mixer-7dff8.appspot.com",
-    messagingSenderId: "63170570354",
-    appId: "1:63170570354:web:e3466c0352067402bebaeb",
-    measurementId: "G-Y1RM9N243J"
+    apiKey: process.env.GATSBY_API_KEY,
+    authDomain: process.env.GATSBY_AUTH_DOMAIN,
+    projectId: process.env.GATSBY_PROJECT_ID,
+    storageBucket: process.env.GATSBY_STORAGE_BUCKET,
+    messagingSenderId: process.env.GATSBY_MESSAGING_SENDER_ID,
+    appId: process.env.GATSBY_APP_ID,
+    measurementId: process.env.GATSBY_MEASUREMENT_ID,
   };
 
   export default !firebase.apps.length
