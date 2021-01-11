@@ -12,8 +12,10 @@ export default function Navbar({user}) {
         }
         getUser(user.uid).then(val => {
             setDisplayName(val.display_name)
-            setProfilePicture(val.images[0].url)
-            console.log(val.images[0].url)
+            if (!val.images || val.images.length == 0)
+                setProfilePicture("https://o.dlf.pt/dfpng/smallpng/276-2761324_transparent-default-avatar-png-profile-no-image-icon.png")
+            else
+                setProfilePicture(val.images[0].url)
         })
     }, [])
     
