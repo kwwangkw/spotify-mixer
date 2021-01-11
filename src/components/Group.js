@@ -173,7 +173,8 @@ export default function Group({ user, groupId }) {
         return (
             <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen ">
                 <Navbar user={user}/>
-                <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16 md:pt-36 p-5">
+                <div className="w-full h-full flex flex-col justify-center text-center items-center">
+                    <div className="w-full h-full flex flex-col justify-center text-center items-center pt-20 mb-12 lg:mb-20">
                     <div className="flex items-center justify-center flex-col md:flex-row">
                         <h1 className="text-white font-medium text-4xl md:text-5xl mb-3">{groupName}<span></span></h1>
                         <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
@@ -212,6 +213,7 @@ export default function Group({ user, groupId }) {
                     >
                         Leave Group
                     </button>
+                    </div>
 
                     {!isGen && (<div>
                         <div className="flex flex-col md:flex-row items-center mt-12">
