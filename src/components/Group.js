@@ -245,7 +245,7 @@ export default function Group({ user, groupId }) {
                                     value={playlistName}
                                     onChange={e => setPlaylistName(e.target.value)}
                                 />
-                                {invalidInput === "playlistName" && (<span className="text-red-500 font-thin text-center mb-8">Please enter a playlist name</span>)}
+                                {invalidInput === "playlistName" && (<p className="text-red-400 font-thin text-center mb-8">Please enter a playlist name</p>)}
                                 <label className="text-primary-400 text-md md:text-xl font-light">Tracks per Contributor</label>
                                 <div className="w-1/4 flex flex-col items-center">
                                     <input 
@@ -256,7 +256,7 @@ export default function Group({ user, groupId }) {
                                         onChange={e => setLimitPerPerson(parseFloat(e.target.value))}
                                         className={"text-2xl bg-transparent text-white font-thin text-center outline-none overflow-visible border-b " + (invalidInput === "limitPerPerson" ? "border-red-500" : "border-gray-500 mb-8")}
                                     />
-                                    {invalidInput === "limitPerPerson" && (<span className="text-red-500 font-thin text-center mb-8">1-50</span>)}
+                                    {invalidInput === "limitPerPerson" && (<p className="text-red-400 font-thin text-center mb-8">1-50</p>)}
                                 </div>
                                 <label className="text-primary-400 text-md md:text-xl font-light">Fav Songs From...</label>
                                 <div className={"flex flex-col lg:flex-row text-xl text-white font-thin text-left lg:text-center " + (invalidInput === "timeRange" ? "" : "mb-8")}>
@@ -273,7 +273,7 @@ export default function Group({ user, groupId }) {
                                         <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
                                     </label>
                                 </div>
-                                {invalidInput === "timeRange" && (<span className="text-red-500 font-thin text-center mb-8">Reselect an option</span>)}
+                                {invalidInput === "timeRange" && (<p className="text-red-400 font-thin text-center mb-8">Reselect an option</p>)}
                                 <button
                                     style={{'outline': 'none'}}
                                     className="text-white font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
