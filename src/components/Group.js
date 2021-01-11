@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser, leaveGroup } from "../utils/data"
 import { Link, navigate } from "gatsby"
 import LoadingScreen from "./LoadingScreen"
-import spinningCircle from "../images/spinning-circles.svg"
+import Navbar from "./Navbar"
 
 export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
@@ -136,7 +136,8 @@ export default function Group({ user, groupId }) {
     if (!isInGroup) {
         return (
             <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen">
-                <div className="w-full h-full flex flex-col justify-center text-center items-center">
+                <Navbar user={user}/>
+                <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16">
                     <h1 className="text-white font-thin text-5xl mb-16">
                         You've been invited to join a Spotify Mixer group:
                     </h1>
@@ -167,8 +168,9 @@ export default function Group({ user, groupId }) {
     }
     if (playlistLink === "") {
         return (
-            <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen flex items-center justify-center p-5">
-                <div className="w-full h-full flex flex-col justify-center text-center items-center">
+            <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen ">
+                <Navbar user={user}/>
+                <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16 md:pt-36 p-5">
                     <div className="flex items-center justify-center flex-col md:flex-row">
                         <h1 className="text-white font-medium text-4xl md:text-5xl mb-3">{groupName}<span></span></h1>
                         <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
@@ -278,9 +280,6 @@ export default function Group({ user, groupId }) {
                                     }
                                 }}
                             >
-                                <svg className="animateSpin">
-                                    
-                                </svg>
                                 Generate Playlist
                             </button>
                         </div>
@@ -292,6 +291,7 @@ export default function Group({ user, groupId }) {
 
     return (
         <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
+            <Navbar user={user}/>
             <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-12 lg:mb-20">
                 <div className="flex flex-col items-center justify-center md:flex-row">
                     <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
@@ -374,7 +374,9 @@ export default function Group({ user, groupId }) {
                         {playlistTracks && playlistTracks.map((track) => (
                             <a key={track.id} href={track.song_url} target="_blank" rel="noop  ener noreferrer">
                                 <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
-                                    <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
+                                    <div className="flex flex-col">
+                                        <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
+                                    </div>
                                     <div id="desc" className="w-full flex flex-col justify-center">
                                         <div className="flex flex-row w-full justify-between">
                                             <div className="w-44 md:w-96">

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { navigate, Link } from "gatsby"
 import { createGroup } from "../utils/data"
+import Navbar from "./Navbar"
 
 export default function NewGroup({ user }) {
     const [groupName, setGroupName] = useState("Untitled Group")
@@ -14,10 +15,11 @@ export default function NewGroup({ user }) {
     //pb-16 pt-20 px-24
 
     return (
-        <div className="bg-dark-gray text-primary-400 w-full h-screen font-sans">
-            <div className="w-full h-full flex flex-col justify-center text-center items-center">
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
+            <Navbar user={user}/>
+            <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16 md:pt-36">
                 <div className="border-2 border-transparent rounded-3xl">
-                    <h1 className="flex flex-col md:flex-row text-primary-400 font-semi-bold text-5xl mb-16 mx-auto">Start Exploring: <span className="text-white font-thin text-5xl md:mb-10">Create a Group</span></h1>
+                    <h1 className="flex flex-col md:flex-row text-primary-400 font-semi-bold text-5xl mb-16 mx-auto">Start Exploring:&thinsp;<span className="text-white font-thin text-5xl md:mb-10">Create a Group</span></h1>
                     <div className="w-8/12 md:w-5/12 mx-auto">
                         <input 
                             className="text-2xl md:text-3xl bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-white" 

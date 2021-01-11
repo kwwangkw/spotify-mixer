@@ -4,6 +4,7 @@ import { getUserGroups } from "../utils/data"
 import { safeAPI, signOut } from "../utils/auth"
 import { Link } from "gatsby"
 import LoadingScreen from "./LoadingScreen"
+import Navbar from "./Navbar"
 
 export default function Home({ user }) {
     const [artists, setArtists] = useState([])
@@ -31,9 +32,9 @@ export default function Home({ user }) {
         return <LoadingScreen/>
     }
     return (
-        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans px-8 md:px-10 lg:px-16">
-            {console.log(artists)}
-            {console.log(tracks)}
+        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
+            <Navbar user={user}/>
+            <div className="px-8 md:px-10 lg:px-16">
             <div className="flex flex-col justify-center text-center pt-16">
                 <h1 className="text-primary-400 text-4xl mb-2">Welcome {user.display_name},</h1>
                 <h1 className="text-gray-400 text-5xl mb-16">Let's discover some music!</h1>
@@ -144,6 +145,7 @@ export default function Home({ user }) {
                         </li>
                     </Link>
                 </ul>
+            </div>
             </div>
        </div>
     )

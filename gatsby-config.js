@@ -12,6 +12,7 @@ module.exports = {
       options: {
         name: "images",
         path: "./src/images/",
+        icon: "https://love2dev.com/img/2000px-instagram_logo_2016svg-2000x2000.png",
       },
       __key: "images",
     },
