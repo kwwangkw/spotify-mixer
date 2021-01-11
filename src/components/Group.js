@@ -26,6 +26,9 @@ export default function Group({ user, groupId }) {
     const DEFAULT_TIME_RANGE = "short_term"
     const [timeRange, setTimeRange] = useState(DEFAULT_TIME_RANGE)
 
+    // playlist input validation
+    const [invalidInput, setInvalidInput] = useState("")
+
     function copyToClipboard(){
         var temp = document.createElement('input'),
         text = window.location.href;
@@ -237,23 +240,26 @@ export default function Group({ user, groupId }) {
                             <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
                                 <label className="text-primary-400 text-md md:text-xl font-light">Playlist Name</label>
                                 <input 
-                                    className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
+                                    className={"text-3xl bg-transparent text-white font-thin text-center outline-none overflow-visible border-b px-0 " + (invalidInput === "playlistName" ? "border-red-500" : "border-gray-500 mb-8")} 
                                     placeholder="e.g. Raining Whales"
+                                    value={playlistName}
                                     onChange={e => setPlaylistName(e.target.value)}
                                 />
+                                {invalidInput === "playlistName" && (<span className="text-red-500 font-thin text-center mb-8">Please enter a playlist name</span>)}
                                 <label className="text-primary-400 text-md md:text-xl font-light">Tracks per Contributor</label>
                                 <div className="w-1/4 flex flex-col items-center">
                                     <input 
                                         type="number"
                                         min="1"
                                         max="50"
-                                        defaultValue = {DEFAULT_LIMIT_PER_PERSON.toString()}
+                                        value={limitPerPerson.toString()}
                                         onChange={e => setLimitPerPerson(parseFloat(e.target.value))}
-                                        className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
+                                        className={"text-2xl bg-transparent text-white font-thin text-center outline-none overflow-visible border-b " + (invalidInput === "limitPerPerson" ? "border-red-500" : "border-gray-500 mb-8")}
                                     />
+                                    {invalidInput === "limitPerPerson" && (<span className="text-red-500 font-thin text-center mb-8">1-50</span>)}
                                 </div>
                                 <label className="text-primary-400 text-md md:text-xl font-light">Fav Songs From...</label>
-                                <div className="flex flex-col lg:flex-row mb-8 text-xl text-white font-thin text-left lg:text-center">
+                                <div className={"flex flex-col lg:flex-row text-xl text-white font-thin text-left lg:text-center " + (invalidInput === "timeRange" ? "" : "mb-8")}>
                                     <label className="mx-3">
                                         <input type="radio" name="size" id="short_term" value="short_term" checked={timeRange === "short_term"} onChange={e => setTimeRange(e.target.value)} />
                                         <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
@@ -267,7 +273,7 @@ export default function Group({ user, groupId }) {
                                         <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
                                     </label>
                                 </div>
-
+                                {invalidInput === "timeRange" && (<span className="text-red-500 font-thin text-center mb-8">Reselect an option</span>)}
                                 <button
                                     style={{'outline': 'none'}}
                                     className="text-white font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
@@ -280,10 +286,13 @@ export default function Group({ user, groupId }) {
                                             refreshPlaylist(playlist.id)
                                             setTimeout(() => setIsGen(false), 5000)
                                         } catch(e) {
-                                            if (e !== "invalid input") {
+                                            setIsGen(false)
+                                            if (["playlistName", "timeRange", "limitPerPerson"].includes(e)) {
+                                                setInvalidInput(e)
+                                            }
+                                            else {
                                                 throw e
                                             }
-                                            alert("Invalid input")
                                         }
                                     }}
                                 >

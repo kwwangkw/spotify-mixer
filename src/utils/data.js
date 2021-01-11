@@ -71,13 +71,17 @@ async function fillPlaylist(uid, groupID, playlistName, playlistID, timeRange, l
 }
 
 async function createAndFillPlaylist(user, groupID, playlistName, timeRange, limitPerPerson) {
-    if (!playlistName || !["short_term", "medium_term", "long_term"].includes(timeRange) || 
-        !Number.isInteger(limitPerPerson) || limitPerPerson <= 0 || limitPerPerson > 50) {
-        throw "invalid input"
+    if (!playlistName) {
+        throw "playlistName"
+    }
+    if (!["short_term", "medium_term", "long_term"].includes(timeRange)) {
+        throw "timeRange"
+    } 
+    if (!Number.isInteger(limitPerPerson) || limitPerPerson <= 0 || limitPerPerson > 50) {
+        throw "limitPerPerson"
     }
     const playlist = await createPlaylist(user.uid, playlistName)
     await fillPlaylist(user.uid, groupID, playlistName, playlist.data.id, timeRange, limitPerPerson)
-
     return playlist.data
 }
 
