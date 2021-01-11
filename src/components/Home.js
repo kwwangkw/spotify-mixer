@@ -147,6 +147,6 @@ export default function Home({ user }) {
                 </ul>
             </div>
             </div>
-       </div>
+        </div>
     )
 }

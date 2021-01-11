@@ -170,7 +170,7 @@ async function getGroup(groupId) {
 
 async function getUserGroups(uid) {
     const db = firebaseInst.firestore()
-    const docSnapshot = await db.collection(groupsCollection).where("users", "array-contains", uid).get()
+    const docSnapshot = await db.collection(groupsCollection).where("users", "array-contains", uid).orderBy("name", "asc").get()
     let userGroups = []
     docSnapshot.forEach(doc => {
         const docWithID = doc.data()
