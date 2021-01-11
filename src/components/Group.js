@@ -3,6 +3,8 @@ import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsI
 import { Link, navigate } from "gatsby"
 import LoadingScreen from "./LoadingScreen"
 import Navbar from "./Navbar"
+import MagicWand from "./MagicWand"
+import './styles/magicwand.css'
 
 export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
@@ -16,6 +18,7 @@ export default function Group({ user, groupId }) {
     const [playlistTracks, setPlaylistTracks] = useState([])
     const [timeoutID, setTimeoutID] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
+    const [isGen, setIsGen] = useState(false)
 
     // For generate playlist form
     const DEFAULT_LIMIT_PER_PERSON = 3
@@ -210,83 +213,90 @@ export default function Group({ user, groupId }) {
                         Leave Group
                     </button>
 
-                    <div className="flex flex-col md:flex-row items-center mt-12">
-                        <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
-                            <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-3xl md:text-4xl">Ahhhh!</h2>
-                            <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-3xl md:text-4xl">You haven't created a playlist for this group yet- let's get started!</h2>
-                            <button
-                                style={{'outline': 'none'}}
-                                className="invisible md:visible md:mr-5 text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-16 hover:bg-primary-500 transition duration-300 ease-in-out"
-                                onClick={async () => {
-                                    copyToClipboard()
-                                    setIsCopied(true)
-                                    setCopyTimeout(1000)
-                                }}
-                            >
-                                Invite Friends
-                                <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
-                            </button>
-                        </div>
+                    {!isGen && (<div>
+                        <div className="flex flex-col md:flex-row items-center mt-12">
+                            <div className="md:w-1/2 flex flex-col items-center md:items-end justify-center md:border-r border-gray-500 text-center md:text-right md:pr-5 lg:pl-40 md:pt-10">
+                                <h2 className="flex border-none -mb-3 p-5 text-primary-400 font-medium text-3xl md:text-4xl">Ahhhh!</h2>
+                                <h2 className="flex border-none -mt-3 p-5 text-gray-400 font-extralight text-3xl md:text-4xl">You haven't created a playlist for this group yet- let's get started!</h2>
+                                <button
+                                    style={{'outline': 'none'}}
+                                    className="invisible md:visible md:mr-5 text-white bg-gray-500 font-semibold text-center rounded-full py-1 px-5 mb-16 hover:bg-primary-500 transition duration-300 ease-in-out"
+                                    onClick={async () => {
+                                        copyToClipboard()
+                                        setIsCopied(true)
+                                        setCopyTimeout(1000)
+                                    }}
+                                >
+                                    Invite Friends
+                                    <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
+                                </button>
+                            </div>
 
-                        <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
-                            <label className="text-primary-400 text-md md:text-xl font-light">Playlist Name</label>
-                            <input 
-                                className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
-                                placeholder="e.g. Raining Whales"
-                                onChange={e => setPlaylistName(e.target.value)}
-                            />
-                            <label className="text-primary-400 text-md md:text-xl font-light">Tracks per Contributor</label>
-                            <div className="w-1/4 flex flex-col items-center">
+                            <div className="flex flex-col text-white text-lg items-center md:pl-5 -mt-10 md:mt-0 pt-10 md:pt-0 md:border-none">
+                                <label className="text-primary-400 text-md md:text-xl font-light">Playlist Name</label>
                                 <input 
-                                    type="number"
-                                    min="1"
-                                    max="50"
-                                    defaultValue = {DEFAULT_LIMIT_PER_PERSON.toString()}
-                                    onChange={e => setLimitPerPerson(parseFloat(e.target.value))}
-                                    className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
+                                    className="text-3xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500 px-0" 
+                                    placeholder="e.g. Raining Whales"
+                                    onChange={e => setPlaylistName(e.target.value)}
                                 />
-                            </div>
-                            <label className="text-primary-400 text-md md:text-xl font-light">Fav Songs From...</label>
-                            <div className="flex flex-col lg:flex-row mb-8 text-xl text-white font-thin text-left lg:text-center">
-                                <label className="mx-3">
-                                    <input type="radio" name="size" id="short_term" value="short_term" checked={timeRange === "short_term"} onChange={e => setTimeRange(e.target.value)} />
-                                    <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
-                                </label>
-                                <label className="mx-3">
-                                    <input type="radio" name="size" id="medium_term" value="medium_term" checked={timeRange === "medium_term"} onChange={e => setTimeRange(e.target.value)} />
-                                    <span className="mb-8 bg-transparent outline-none ml-2">Past Half Year</span>
-                                </label>
-                                <label className="mx-3">
-                                    <input type="radio" name="size" id="long_term" value="long_term" checked={timeRange === "long_term"} onChange={e => setTimeRange(e.target.value)} />
-                                    <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
-                                </label>
-                            </div>
+                                <label className="text-primary-400 text-md md:text-xl font-light">Tracks per Contributor</label>
+                                <div className="w-1/4 flex flex-col items-center">
+                                    <input 
+                                        type="number"
+                                        min="1"
+                                        max="50"
+                                        defaultValue = {DEFAULT_LIMIT_PER_PERSON.toString()}
+                                        onChange={e => setLimitPerPerson(parseFloat(e.target.value))}
+                                        className="text-2xl mb-8 bg-transparent text-white font-thin text-center outline-none overflow-visible border-b border-gray-500" 
+                                    />
+                                </div>
+                                <label className="text-primary-400 text-md md:text-xl font-light">Fav Songs From...</label>
+                                <div className="flex flex-col lg:flex-row mb-8 text-xl text-white font-thin text-left lg:text-center">
+                                    <label className="mx-3">
+                                        <input type="radio" name="size" id="short_term" value="short_term" checked={timeRange === "short_term"} onChange={e => setTimeRange(e.target.value)} />
+                                        <span className="mb-8 bg-transparent outline-none ml-2">Recents</span>
+                                    </label>
+                                    <label className="mx-3">
+                                        <input type="radio" name="size" id="medium_term" value="medium_term" checked={timeRange === "medium_term"} onChange={e => setTimeRange(e.target.value)} />
+                                        <span className="mb-8 bg-transparent outline-none ml-2">Past Half Year</span>
+                                    </label>
+                                    <label className="mx-3">
+                                        <input type="radio" name="size" id="long_term" value="long_term" checked={timeRange === "long_term"} onChange={e => setTimeRange(e.target.value)} />
+                                        <span className="mb-8 bg-transparent outline-none ml-2">All Time</span>
+                                    </label>
+                                </div>
 
-                            <button
-                                style={{'outline': 'none'}}
-                                className="text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
-                                onClick={async () => {
-                                    try {
-                                        const playlist = await createAndFillPlaylist(user, groupId, playlistName, timeRange, limitPerPerson)
-                                        console.log(playlist)
-                                        setPlaylistID(playlist.id)
-                                        setPlaylistLink(playlist.external_urls.spotify)
-                                        refreshPlaylist(playlist.id)
-                                    } catch(e) {
-                                        if (e !== "invalid input") {
-                                            throw e
+                                <button
+                                    style={{'outline': 'none'}}
+                                    className="text-white font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                                    onClick={async () => {
+                                        try {
+                                            setIsGen(true)
+                                            const playlist = await createAndFillPlaylist(user, groupId, playlistName, timeRange, limitPerPerson)
+                                            console.log(playlist)
+                                            setPlaylistID(playlist.id)
+                                            setPlaylistLink(playlist.external_urls.spotify)
+                                            refreshPlaylist(playlist.id)
+                                            setTimeout(() => setIsGen(false), 5000)
+                                        } catch(e) {
+                                            if (e !== "invalid input") {
+                                                throw e
+                                            }
+                                            alert("Invalid input")
                                         }
-                                        alert("Invalid input")
-                                    }
-                                }}
-                            >
-                                Generate Playlist
-                            </button>
+                                    }}
+                                >
+                                    Generate Playlist
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    )}
+                    {isGen && (<MagicWand />)}
+                  </div>
+
                 </div>
-            </div>
-        )
+            )
     }
 
     return (
@@ -332,7 +342,7 @@ export default function Group({ user, groupId }) {
                     Leave Group
                 </button>
             </div>
-            <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
+            {!isGen && <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
                 <div id="left" className="lg:w-1/3 text-center flex flex-col items-center mb-20 lg:mb-0 lg:mr-20">
                     <div className="group">
                         <a href={playlistLink} target="_blank">
@@ -350,8 +360,10 @@ export default function Group({ user, groupId }) {
                         style={{'outline': 'none'}}
                         className="text-white bg-primary-500 font-semibold text-center rounded-full py-1 px-5 mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                         onClick={async () => {
+                            setIsGen(true)
                             await updatePlaylist(groupId, playlistID)
                             refreshPlaylist(playlistID)
+                            setTimeout(() => setIsGen(false), 5000)
                         }}
                     >
                         Update Playlist
@@ -397,7 +409,8 @@ export default function Group({ user, groupId }) {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div>}
+            {isGen && (<MagicWand />)}
         </div>
     )
 }
