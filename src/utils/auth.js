@@ -1,5 +1,5 @@
 import axios from "axios"
-import firebaseInst from "../firebase"
+import firebaseInst, { FieldValue } from "../firebase"
 import { usersCollection, profileURI } from "../utils/constants"
 
 function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
@@ -11,6 +11,7 @@ function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
             curr_token: accessToken, 
             refresh_token: refreshToken, 
             expire_time: secondsSince1970 + expireSeconds,
+            timestamp: FieldValue.serverTimestamp(),
         }, {merge: true})
 }
 

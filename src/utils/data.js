@@ -48,6 +48,7 @@ async function getTopTracks(groupID, timeRange, limitPerPerson) {
 }
 
 async function setGroup(groupID, group) {
+    group.timestamp = FieldValue.serverTimestamp()
     const db = firebaseInst.firestore()
     return db.collection(groupsCollection).doc(groupID).update(group)
 }
@@ -134,7 +135,10 @@ async function checkIsInGroup(user, groupId) {
 async function joinGroup(user, groupId) {
     const db = firebaseInst.firestore()
     const ref = db.collection(groupsCollection).doc(groupId)
-    return ref.update("users", FieldValue.arrayUnion(user.uid));
+    return ref.update({
+        users: FieldValue.arrayUnion(user.uid),
+        timestamp: FieldValue.serverTimestamp(),
+    });
 }
 
 async function leaveGroup(uid, groupId) {
@@ -148,7 +152,10 @@ async function leaveGroup(uid, groupId) {
     if (data.users && data.users.length === 1) {
         return doc.delete()
     }
-    return doc.update("users", FieldValue.arrayRemove(uid));
+    return doc.update({
+        users: FieldValue.arrayRemove(uid),
+        timestamp: FieldValue.serverTimestamp(),
+    });
 }
 
 async function createGroup(user, groupName) {
@@ -157,8 +164,12 @@ async function createGroup(user, groupName) {
         name: groupName,
         playlist_id: "",
         users: [user.uid],
+        timestamp: FieldValue.serverTimestamp()
     })
-    db.collection(usersCollection).doc(user.uid).update("groups", FieldValue.arrayUnion(docRef.id))
+    db.collection(usersCollection).doc(user.uid).update({ 
+        groups: FieldValue.arrayUnion(docRef.id),
+        timestamp: FieldValue.serverTimestamp(),
+    })
     return `/app/group/${docRef.id}`
 }
 
