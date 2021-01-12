@@ -20,7 +20,7 @@ function setAxiosTokenHeader(accessToken) {
 }
 
 async function getNewAccessToken(uid, refreshToken) {
-    const resp = await axios.post(`${process.env.SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
+    const resp = await axios.post(`${process.env.GATSBY_SERVER_URI}/spotify/token/refresh`, {refresh_token: refreshToken})
     const accessToken = resp.data.access_token
     setAxiosTokenHeader(accessToken)
     return setUserTokens(uid, accessToken, refreshToken, resp.data.expires_in)
@@ -57,7 +57,7 @@ async function signOut() {
 async function getFirebaseToken() {
     const spotifyID = await axios.get(profileURI).then(res => res.data.id)
     try {
-        const res = await axios.post(`${process.env.SERVER_URI}/token`, {spotifyID: spotifyID})
+        const res = await axios.post(`${process.env.GATSBY_SERVER_URI}/token`, {spotifyID: spotifyID})
         return firebaseInst.auth.signInWithCustomToken(res.data.firebaseToken)
     } catch(err) {
         console.log(err)
@@ -65,7 +65,7 @@ async function getFirebaseToken() {
 }
 
 async function loginWithSpotify(code, other_redir) {
-    const res = await axios.post(`${process.env.SERVER_URI}/spotify/token`, { code: code, other_redir: other_redir })
+    const res = await axios.post(`${process.env.GATSBY_SERVER_URI}/spotify/token`, { code: code, other_redir: other_redir })
     const [ accessToken, refreshToken, expiresIn ] = [ res.data.access_token, res.data.refresh_token, res.data.expires_in ]
     setAxiosTokenHeader(accessToken)
     const user = await getFirebaseToken()

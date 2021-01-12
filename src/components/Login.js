@@ -4,7 +4,7 @@ import { accountsAuthorizeURI, projectTitle } from "../utils/constants"
 import SEO from "./seo"
 
 export default function Login({ location }) {
-    const redirect_uri = (location.state && location.state.redirectTo) ? (process.env.REDIRECT_URI_AUTHREDIR) : (process.env.REDIRECT_URI)
+    const redirect_uri = (location.state && location.state.redirectTo) ? (process.env.GATSBY_REDIRECT_URI_AUTHREDIR) : (process.env.GATSBY_REDIRECT_URI)
     return (
         <div className="bg-dark-gray text-primary-400 w-full h-screen">
             <SEO title={projectTitle} />
@@ -16,7 +16,7 @@ export default function Login({ location }) {
                         <a href={
                             `${accountsAuthorizeURI}`+
                             `?response_type=code`+ 
-                            `&client_id=${process.env.CLIENT_ID}`+
+                            `&client_id=${process.env.GATSBY_CLIENT_ID}`+
                             `&redirect_uri=${redirect_uri}`+
                             `&scope=user-top-read playlist-modify-public playlist-modify-private`+
                             `&state=${cryptoRandomString({length: 10})}`
