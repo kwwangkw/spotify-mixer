@@ -12,6 +12,7 @@ export default function Home({ user }) {
     const [groups, setGroups] = useState([])
 
     useEffect(() => {
+        console.log(process.env.GATSBY_API_KEY)
         if (!user) {
             return
         }
