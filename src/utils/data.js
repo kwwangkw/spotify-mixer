@@ -115,7 +115,6 @@ async function updatePlaylist(groupID, playlistID) {
 }
 
 async function checkIsInGroup(user, groupId) {
-    console.log(groupId)
     const db = firebaseInst.firestore
     const ref = db.collection(groupsCollection).doc(groupId)
     const doc = await ref.get()

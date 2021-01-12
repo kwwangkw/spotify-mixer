@@ -28,8 +28,6 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         }
         const spotifyUser = await getUser(user.uid)
         user = {...user, ...spotifyUser}
-        console.log("SIGNED IN!")
-        console.log(user)
         setPage(
           <div>
             <SEO title={projectTitle} />

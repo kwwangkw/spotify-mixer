@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { createAndFillPlaylist, updatePlaylist, getPlaylist, joinGroup, checkIsInGroup, getGroup, getUser, leaveGroup } from "../utils/data"
-import { Link, navigate } from "gatsby"
+import { createAndFillPlaylist, updatePlaylist, getPlaylist, checkIsInGroup, getGroup, getUser, leaveGroup } from "../utils/data"
+import { navigate } from "gatsby"
 import LoadingScreen from "./LoadingScreen"
 import Navbar from "./Navbar"
 import MagicWand from "./MagicWand"
-import './styles/magicwand.css'
+import JoinGroup from "./JoinGroup"
+import "./styles/magicwand.css"
 
 export default function Group({ user, groupId }) {
     const [isInGroup, setIsInGroup] = useState(null)
@@ -17,7 +18,6 @@ export default function Group({ user, groupId }) {
     const [isCopied, setIsCopied] = useState(false)
     const [playlistTracks, setPlaylistTracks] = useState([])
     const [timeoutID, setTimeoutID] = useState(null)
-    const [isLoaded, setIsLoaded] = useState(false)
     const [isGen, setIsGen] = useState(false)
 
     // For generate playlist form
@@ -64,7 +64,6 @@ export default function Group({ user, groupId }) {
             tracks.push(currentTrack)
         }
         setPlaylistTracks(tracks)
-        console.log("parsed tracks");
     }
 
     function setCopyTimeout(milliseconds) {
@@ -80,7 +79,6 @@ export default function Group({ user, groupId }) {
     function refreshPlaylist(playlistID) {
         getPlaylist(user, playlistID).then((data) => 
         {
-            console.log(data)
             setPlaylistName(data.data.name)
             setPlaylistImageLink(data.data.images[0].url)
             parseTracks(data.data.tracks);
@@ -99,7 +97,6 @@ export default function Group({ user, groupId }) {
 
     useEffect(() => {
         async function func() {
-            setIsLoaded(false);
             if (!user) {
                 return
             }
@@ -109,7 +106,6 @@ export default function Group({ user, groupId }) {
                     setIsInGroup(val)
                 }
             })
-
             const group = await getGroup(groupId)
             if (group) {
                 setGroupName(group.name)
@@ -119,57 +115,25 @@ export default function Group({ user, groupId }) {
                     member = (({id, display_name, images}) => ({id, display_name, images}))(member)
                     newGroupMembers.push(member)
                 }
-                console.log(newGroupMembers)
                 setGroupMembers(newGroupMembers)
                 if (group.playlist_id) {
                     setPlaylistID(group.playlist_id)
                     setPlaylistLink(`https://open.spotify.com/playlist/${group.playlist_id}`)
-                    console.log(group.playlist_id)
-                    console.log(user)
                     refreshPlaylist(group.playlist_id)
                 }
             }
-            setIsLoaded(true);
         }
         func()
     }, [])
 
-    if (isInGroup === null || !isLoaded) {
+    if (isInGroup === null) {
         return (
             <LoadingScreen />
         )
     }
     if (!isInGroup) {
         return (
-            <div className="bg-dark-gray text-primary-400 w-full font-sans min-h-screen">
-                <Navbar user={user}/>
-                <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16">
-                    <h1 className="text-white font-thin text-5xl mb-16">
-                        You've been invited to join a Spotify Mixer group:
-                    </h1>
-                    <h1 className="italic text-primary-400 font-extralight text-6xl mb-16">{groupName}</h1>
-                    <button
-                        style={{'outline': 'none'}}
-                        className="mx-auto text-dark-gray font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
-                        onClick={() => {
-                            joinGroup(user, groupId).then(() => {
-                                window.location.reload()
-                            })
-                        }}
-                        disabled={isInGroup}
-                    >
-                        Join Group
-                    </button>
-                    <button
-                        style={{'outline': 'none'}}
-                        className="py-1 text-dark-gray font-extralight bg-gray-500 text-xl text-center rounded-full px-5 flex flex-row mb-3 hover:bg-gray-400 transition duration-300 ease-in-out"
-                    >
-                        <Link to={"/app/home"}>
-                            Decline
-                        </Link>
-                    </button>
-                </div>
-            </div>
+            <JoinGroup user={user} groupId={groupId} groupName={groupName} />
         )
     }
     if (playlistLink === "") {
@@ -284,7 +248,7 @@ export default function Group({ user, groupId }) {
                                             setPlaylistID(playlist.id)
                                             setPlaylistLink(playlist.external_urls.spotify)
                                             refreshPlaylist(playlist.id)
-                                            setTimeout(() => setIsGen(false), 5000)
+                                            setTimeout(() => setIsGen(false), 3000)
                                         } catch(e) {
                                             setIsGen(false)
                                             if (["playlistName", "timeRange", "limitPerPerson"].includes(e)) {
@@ -372,7 +336,7 @@ export default function Group({ user, groupId }) {
                             setIsGen(true)
                             await updatePlaylist(groupId, playlistID)
                             refreshPlaylist(playlistID)
-                            setTimeout(() => setIsGen(false), 5000)
+                            setTimeout(() => setIsGen(false), 3000)
                         }}
                     >
                         Update Playlist
