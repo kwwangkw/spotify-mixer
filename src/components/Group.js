@@ -23,7 +23,7 @@ export default function Group({ user, groupId }) {
     // For generate playlist form
     const DEFAULT_LIMIT_PER_PERSON = 10
     const [limitPerPerson, setLimitPerPerson] = useState(DEFAULT_LIMIT_PER_PERSON)
-    const DEFAULT_TIME_RANGE = "short_term"
+    const DEFAULT_TIME_RANGE = "medium_term"
     const [timeRange, setTimeRange] = useState(DEFAULT_TIME_RANGE)
 
     // playlist input validation
