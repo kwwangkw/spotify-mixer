@@ -180,7 +180,7 @@ export default function Group({ user, groupId }) {
                     <div className="w-full h-full flex flex-col justify-center text-center items-center pt-20 mb-12 lg:mb-20">
                     <div className="flex items-center justify-center flex-col md:flex-row">
                         <h1 className="text-white font-medium text-4xl md:text-5xl mb-3">{groupName}<span></span></h1>
-                        <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
+                        <button style={{'outline': 'none'}} className="invisible md:visible -mt-8 md:mt-0 relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
                                 onClick={() => {
                                     copyToClipboard()
                                     setIsCopied(true)
@@ -215,6 +215,18 @@ export default function Group({ user, groupId }) {
                         }}
                     >
                         Leave Group
+                    </button>
+                    <button
+                        style={{'outline': 'none'}}
+                        className="text-white visible md:invisible mb-0 md:-mb-8 bg-gray-500 font-semibold text-center rounded-full py-1 px-5 hover:bg-primary-500 transition duration-300 ease-in-out"
+                        onClick={async () => {
+                            copyToClipboard()
+                            setIsCopied(true)
+                            setCopyTimeout(1000)
+                        }}
+                    >
+                        Invite Friends
+                        <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
                     </button>
                     </div>
 
@@ -276,7 +288,7 @@ export default function Group({ user, groupId }) {
                                 {invalidInput === "timeRange" && (<p className="text-red-400 font-thin text-center mb-8">Reselect an option</p>)}
                                 <button
                                     style={{'outline': 'none'}}
-                                    className="text-white font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
+                                    className="text-white font-extralight bg-primary-500 text-xl text-center rounded-full py-1 px-5 flex flex-row mb-16 md:mb-3 hover:bg-primary-400 transition duration-300 ease-in-out"
                                     onClick={async () => {
                                         try {
                                             setIsGen(true)
@@ -314,7 +326,7 @@ export default function Group({ user, groupId }) {
             <div className="w-full h-full flex flex-col text-center items-center px-4 pt-20 mb-12 lg:mb-20">
                 <div className="flex flex-col items-center justify-center md:flex-row">
                     <h1 className="text-white font-medium text-5xl mb-3">{groupName}<span></span></h1>
-                    <button style={{'outline': 'none'}} className="relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
+                    <button style={{'outline': 'none'}} className="invisible md:visible -mt-8 md:mt-0 relative group text-primary-400 mb-3 text-5xl hover:text-primary-300 transition duration-300 ease-in-out"
                             onClick={() => {
                                 copyToClipboard()
                                 setIsCopied(true)
@@ -396,9 +408,9 @@ export default function Group({ user, groupId }) {
                             <a key={track.id} href={track.song_url} target="_blank" rel="noop  ener noreferrer">
                                 <div className="flex flex-row w-full px-4 py-1 mb-4 hover:bg-primary-400 hover:bg-opacity-15 transition duration-300 ease-in-out group">
                                     <div className="flex flex-col">
-                                        <img className="mr-3" width="75px" height="75px" src={track.image_url} alt={track.name} />
+                                        <img className="" width="75px" height="75px" src={track.image_url} alt={track.name} />
                                     </div>
-                                    <div id="desc" className="w-full flex flex-col justify-center">
+                                    <div id="desc" className="ml-3 w-full flex flex-col justify-center">
                                         <div className="flex flex-row w-full justify-between">
                                             <div className="w-44 md:w-96">
                                                 <p className="truncate text-white mb-1 group-hover:underline flex-none">{track.name}</p>
