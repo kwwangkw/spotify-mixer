@@ -5,7 +5,7 @@ import { projectTitle } from "../utils/constants";
 // markup
 const IndexPage = () => {
   return (
-    <div>
+    <div className="bg-dark-gray">
       <LoadingScreen />
       <SEO title={projectTitle} />
     </div>
