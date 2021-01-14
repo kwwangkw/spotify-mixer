@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { navigate } from "gatsby"
-import firebaseInst from "../firebase"
-import { getUser } from "../utils/data"
-import { projectTitle } from "../utils/constants";
-import SEO from "./seo";
+import firebaseInst from "../../firebase"
+import { getUser } from "../../utils/data"
+import { projectTitle } from "../../utils/constants";
+import SEO from "../SEO";
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const [page, setPage] = useState(null)

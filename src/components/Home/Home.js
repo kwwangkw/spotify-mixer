@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import { getUserGroups } from "../utils/data"
-import { safeAPI } from "../utils/auth"
+import { getUserGroups } from "../../utils/data"
+import { safeAPI } from "../../utils/auth"
 import { Link } from "gatsby"
-import LoadingScreen from "./LoadingScreen"
-import Navbar from "./Navbar"
+import LoadingScreen from "../LoadingScreen"
+import Navbar from "../Navbar"
 
 export default function Home({ user }) {
     const [artists, setArtists] = useState([])

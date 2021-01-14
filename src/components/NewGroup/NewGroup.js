@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { navigate, Link } from "gatsby"
-import { createGroup } from "../utils/data"
-import Navbar from "./Navbar"
+import { createGroup } from "../../utils/data"
+import Navbar from "../Navbar"
 
 export default function NewGroup({ user }) {
     const [groupName, setGroupName] = useState("Untitled Group")

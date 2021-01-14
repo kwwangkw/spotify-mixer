@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
-import Navbar from "./Navbar"
-import { joinGroup } from "../utils/data"
+import Navbar from "../Navbar"
+import { joinGroup } from "../../utils/data"
 
 export default function JoinGroup({ user, groupId, groupName }) {
     return (

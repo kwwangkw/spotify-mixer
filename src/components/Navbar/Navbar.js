@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { navigate, Link } from "gatsby"
-import { getUser } from "../utils/data"
-import { safeAPI, signOut } from "../utils/auth"
+import { Link } from "gatsby"
+import { getUser } from "../../utils/data"
+import { signOut } from "../../utils/auth"
 
 export default function Navbar({user}) {
     const [displayName, setDisplayName] = useState("")

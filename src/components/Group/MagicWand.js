@@ -1,5 +1,5 @@
 import React from "react"
-import "./styles/magicwand.css"
+import "./magicwand.css"
 
 
 export default function MagicWand() {
