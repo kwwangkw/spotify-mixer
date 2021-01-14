@@ -4,7 +4,6 @@ import { getUserGroups } from "../../utils/data"
 import { safeAPI } from "../../utils/auth"
 import { Link } from "gatsby"
 import LoadingScreen from "../LoadingScreen"
-import Navbar from "../Navbar"
 
 export default function Home({ user }) {
     const [artists, setArtists] = useState([])
@@ -32,8 +31,7 @@ export default function Home({ user }) {
         return <LoadingScreen/>
     }
     return (
-        <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
-            <Navbar user={user}/>
+        <>
             <div className="px-8 md:px-10 lg:px-16">
             <div className="flex flex-col justify-center text-center pt-16">
                 <h1 className="text-primary-400 text-4xl mb-2">Welcome {user.display_name},</h1>
@@ -142,6 +140,6 @@ export default function Home({ user }) {
                 </ul>
             </div>
             </div>
-        </div>
+        </>
     )
 }

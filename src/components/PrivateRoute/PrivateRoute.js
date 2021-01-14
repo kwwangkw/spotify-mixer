@@ -5,6 +5,7 @@ import firebaseInst from "../../firebase"
 import { getUser } from "../../utils/data"
 import { projectTitle } from "../../utils/constants";
 import SEO from "../SEO";
+import Navbar from "../Navbar";
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const [page, setPage] = useState(null)
@@ -29,8 +30,9 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         const spotifyUser = await getUser(user.uid)
         user = {...user, ...spotifyUser}
         setPage(
-          <div>
+          <div className="bg-dark-gray text-primary-400 w-full min-h-screen font-sans">
             <SEO title={projectTitle} />
+            <Navbar user={user} />
             <Component {...rest} user={user} />
           </div>
         )
