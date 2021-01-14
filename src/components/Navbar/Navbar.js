@@ -30,7 +30,7 @@ export default function Navbar({user}) {
                     </div>
                 </Link>
                 <button type="button" onClick={signOut} style={{'outline': 'none'}}>
-                    <div className="text-white flex flex-row items-center group hover:bg-primary-500 transition duration-200 ease-in-out pl-4 rounded-full">
+                    <div className="text-white flex flex-row items-center group bg-primary-500 md:bg-transparent hover:bg-primary-500 transition duration-200 ease-in-out pl-4 rounded-full">
                         <p className="mr-3 text-dark-gray font-medium opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out">Logout</p>
                         <div className="grid grid-cols-1">
                             <img src={profilePicture} alt="Logout" className="rounded-full z-0 relative col-start-1 row-start-1" style={{'objectFit':'cover', 'width': '45px', 'height': '45px'}}/>
