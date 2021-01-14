@@ -37,8 +37,7 @@ export default function GeneratePlaylistForm({
                         setCopyTimeout(1000)
                     }}
                 >
-                    Invite Friends
-                    <span className={`${ isCopied ? `block` : `hidden` } text-xs text-center md:text-right font-thin ml-1`}>Invite Link Copied!</span>
+                    {isCopied ? "Link Copied!" : "Invite Friends"}
                 </button>
             </div>
 
