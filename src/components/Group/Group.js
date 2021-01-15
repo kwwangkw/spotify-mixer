@@ -112,11 +112,11 @@ export default function Group({ user, groupId }) {
         func()
     }, [])
 
-    console.log({
-        isInGroup,
-        isLoading,
-        playlistLink
-    })
+    // console.log({
+    //     isInGroup,
+    //     isLoading,
+    //     playlistLink
+    // })
 
     if (isInGroup === null || isLoading) {
         return (

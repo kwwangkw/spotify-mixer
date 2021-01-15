@@ -22,7 +22,7 @@ export default function GeneratePlaylistForm({
     const [limitPerPerson, setLimitPerPerson] = useState(DEFAULT_LIMIT_PER_PERSON)
     const [timeRange, setTimeRange] = useState(DEFAULT_TIME_RANGE)
 
-    console.log("In PlaylistFORM");
+    // console.log("In PlaylistFORM");
 
     return (
         <div className="flex flex-col md:flex-row items-center">
