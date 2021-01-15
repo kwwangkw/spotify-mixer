@@ -1,5 +1,5 @@
 import axios from "axios"
-import firebaseInst, { FieldValue } from "../firebase"
+import firebase from "gatsby-plugin-firebase"
 import { safeAPI } from "../utils/auth"
 import { groupsCollection, usersCollection } from "../utils/constants"
 
@@ -16,7 +16,7 @@ async function createPlaylist(uid, playlistName) {
 }
 
 async function getTopTracks(groupID, timeRange, limitPerPerson) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const groupRef = db.collection(groupsCollection).doc(groupID)
     const doc = await groupRef.get()
     if (!doc.exists) {
@@ -48,8 +48,8 @@ async function getTopTracks(groupID, timeRange, limitPerPerson) {
 }
 
 async function setGroup(groupID, group) {
-    group.timestamp = FieldValue.serverTimestamp()
-    const db = firebaseInst.firestore
+    group.timestamp = firebase.firestore.FieldValue.serverTimestamp()
+    const db = firebase.firestore()
     return db.collection(groupsCollection).doc(groupID).update(group)
 }
 
@@ -95,7 +95,7 @@ async function getPlaylist(user, playlistID) {
 }
 
 async function getPlaylistForGroup(groupID) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const snapshot = await db.collection(groupsCollection).doc(groupID).get()
     const data = snapshot.data()
     return data
@@ -115,7 +115,7 @@ async function updatePlaylist(groupID, playlistID) {
 }
 
 async function checkIsInGroup(user, groupId) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const ref = db.collection(groupsCollection).doc(groupId)
     const doc = await ref.get()
     if (!doc.exists) {
@@ -132,16 +132,16 @@ async function checkIsInGroup(user, groupId) {
 }
 
 async function joinGroup(user, groupId) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const ref = db.collection(groupsCollection).doc(groupId)
     return ref.update({
-        users: FieldValue.arrayUnion(user.uid),
-        timestamp: FieldValue.serverTimestamp(),
+        users: firebase.firestore.FieldValue.arrayUnion(user.uid),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
 }
 
 async function leaveGroup(uid, groupId) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const doc = db.collection(groupsCollection).doc(groupId)
     const docContents = await doc.get()
     if (!docContents.exists) {
@@ -152,34 +152,34 @@ async function leaveGroup(uid, groupId) {
         return doc.delete()
     }
     return doc.update({
-        users: FieldValue.arrayRemove(uid),
-        timestamp: FieldValue.serverTimestamp(),
+        users: firebase.firestore.FieldValue.arrayRemove(uid),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
 }
 
 async function createGroup(user, groupName) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const docRef = await db.collection(groupsCollection).add({
         name: groupName,
         playlist_id: "",
         users: [user.uid],
-        timestamp: FieldValue.serverTimestamp()
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
     db.collection(usersCollection).doc(user.uid).update({ 
-        groups: FieldValue.arrayUnion(docRef.id),
-        timestamp: FieldValue.serverTimestamp(),
+        groups: firebase.firestore.FieldValue.arrayUnion(docRef.id),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
     return `/app/group/${docRef.id}`
 }
 
 async function getGroup(groupId) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const docSnapshot = await db.collection(groupsCollection).doc(groupId).get()
     return docSnapshot.data()
 }
 
 async function getUserGroups(uid) {
-    const db = firebaseInst.firestore
+    const db = firebase.firestore()
     const docSnapshot = await db.collection(groupsCollection).where("users", "array-contains", uid).orderBy("name", "asc").get()
     let userGroups = []
     docSnapshot.forEach(doc => {

@@ -20,10 +20,12 @@
     "axios": "^0.21.1",
     "base64url": "^3.0.1",
     "crypto-random-string": "^3.3.0",
+    "dotenv": "^8.2.0",
     "firebase": "^8.2.1",
     "gatsby": "^2.26.1",
     "gatsby-image": "^2.8.0",
     "gatsby-plugin-create-client-paths": "^2.7.0",
+    "gatsby-plugin-firebase": "^0.2.0-beta.4",
     "gatsby-plugin-google-analytics": "^2.9.0",
     "gatsby-plugin-netlify": "^2.9.0",
     "gatsby-plugin-postcss": "^3.4.0",
@@ -39,5 +41,6 @@
     "react-helmet": "^6.1.0",
     "react-loader-spinner": "^3.1.14",
     "tailwindcss": "^2.0.2"
-  }
+  },
+  "devDependencies": {}
 }

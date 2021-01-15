@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import { navigate } from "gatsby"
-import firebaseInst from "../../firebase"
+import firebase from "gatsby-plugin-firebase"
 import { getUser } from "../../utils/data"
 import { projectTitle } from "../../utils/constants";
 import SEO from "../SEO";
@@ -10,7 +10,7 @@ import Navbar from "../Navbar";
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const [page, setPage] = useState(null)
   useEffect(() => {
-    const unsubscribe = firebaseInst.auth.onAuthStateChanged(async user => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
         if (typeof window === "undefined") {
           return
         }
