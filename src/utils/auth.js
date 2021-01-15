@@ -11,7 +11,7 @@ function setUserTokens(uid, accessToken, refreshToken, expireSeconds) {
             curr_token: accessToken, 
             refresh_token: refreshToken, 
             expire_time: secondsSince1970 + expireSeconds,
-            timestamp: firebase.firestore.firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         }, {merge: true})
 }
 
