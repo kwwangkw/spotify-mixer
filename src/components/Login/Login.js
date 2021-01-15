@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import cryptoRandomString from "crypto-random-string"
+import firebase from "gatsby-plugin-firebase"
 import { accountsAuthorizeURI, projectTitle } from "../../utils/constants"
 import SEO from "../SEO"
 
 export default function Login({ location }) {
+    useEffect(() => {
+        firebase.analytics().logEvent("Login Screen View")
+    }, [])
     const redirect_uri = (location.state && location.state.redirectTo) ? (process.env.GATSBY_REDIRECT_URI_AUTHREDIR) : (process.env.GATSBY_REDIRECT_URI)
     return (
         <div className="bg-dark-gray text-primary-400 w-full h-screen">

@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import firebase from "gatsby-plugin-firebase"
 import { navigate, Link } from "gatsby"
 import { createGroup } from "../../utils/data"
 
@@ -11,7 +12,9 @@ export default function NewGroup({ user }) {
         return input.length <= 32
     }
 
-    //pb-16 pt-20 px-24
+    useEffect(() => {
+        firebase.analytics().logEvent("New Group Screen View")
+    }, [])
 
     return (
         <div className="w-full h-full flex flex-col justify-center text-center items-center pt-16 md:pt-36">

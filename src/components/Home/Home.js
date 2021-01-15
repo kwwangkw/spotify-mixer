@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import firebase from "gatsby-plugin-firebase"
 import { getUserGroups } from "../../utils/data"
 import { safeAPI } from "../../utils/auth"
 import { Link } from "gatsby"
@@ -9,6 +10,10 @@ export default function Home({ user }) {
     const [artists, setArtists] = useState([])
     const [tracks, setTracks] = useState([])
     const [groups, setGroups] = useState([])
+
+    useEffect(() => {
+        firebase.analytics().logEvent("Home Screen View")
+    }, [])
 
     useEffect(() => {
         if (!user) {
