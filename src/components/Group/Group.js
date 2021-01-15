@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { updatePlaylist, getPlaylist, checkIsInGroup, getGroup, getUser } from "../../utils/data"
-import { navigate } from "gatsby"
+import { getPlaylist, checkIsInGroup, getGroup, getUser } from "../../utils/data"
+import firebase from "gatsby-plugin-firebase"
 import LoadingScreen from "../LoadingScreen"
 import MagicWand from "./MagicWand"
 import JoinGroup from "./JoinGroup"
@@ -79,6 +79,10 @@ export default function Group({ user, groupId }) {
         setPlaylistLink("")
         setPlaylistImageLink("")
     }
+
+    useEffect(() => {
+        firebase.analytics().logEvent("Group Screen View")
+    }, [])
 
     useEffect(() => {
         async function func() {
