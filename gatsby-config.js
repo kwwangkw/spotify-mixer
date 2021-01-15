@@ -1,6 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: "spotify-mixer",
+    description:
+      "A web app for connecting with friends using audio as a social layer. Constructs Spotify playlists for groups by automatically detecting and adding each contributor's favorite tracks. Filter through a multitude of settings to create your perfect group playlist. Also visualizes your personal listening patterns.",
+    url: "https://priceless-booth-9bcd80.netlify.app/", // No trailing slash allowed!
+    image: "/og.png", // Path to your image you placed in the 'static' folder
   },
   plugins: [
     "gatsby-plugin-postcss",

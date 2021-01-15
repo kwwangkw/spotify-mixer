@@ -1,6 +1,6 @@
 import React from "react"
 import LoadingScreen from "../components/LoadingScreen"
-import SEO from "../components/seo"
+import SEO from "../components/SEO"
 import { projectTitle } from "../utils/constants";
 // markup
 const IndexPage = () => {

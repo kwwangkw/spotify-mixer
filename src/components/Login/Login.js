@@ -1,7 +1,7 @@
 import React from "react"
 import cryptoRandomString from "crypto-random-string"
-import { accountsAuthorizeURI, projectTitle } from "../utils/constants"
-import SEO from "./seo"
+import { accountsAuthorizeURI, projectTitle } from "../../utils/constants"
+import SEO from "../SEO"
 
 export default function Login({ location }) {
     const redirect_uri = (location.state && location.state.redirectTo) ? (process.env.GATSBY_REDIRECT_URI_AUTHREDIR) : (process.env.GATSBY_REDIRECT_URI)
