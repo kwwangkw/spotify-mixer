@@ -24,7 +24,7 @@ export default function Navbar({user}) {
         <div className="bg-light-gray py-2 px-5 md:px-10 flex flex-col">
             <div className="flex flex-row justify-between items-center">
                 <Link to={"/app/home"}>
-                    <div className="text-white flex flex-row items-center group">
+                    <div style={{'outline': 'none'}} className="text-white flex flex-row items-center group">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-primary-400 transition duration-100 ease-in-out"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
                         <p className="ml-1 text-primary-400">spotify<span className="text-white">mixer</span></p>
                     </div>
