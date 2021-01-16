@@ -116,12 +116,6 @@ export default function Group({ user, groupId }) {
         func()
     }, [])
 
-    // console.log({
-    //     isInGroup,
-    //     isLoading,
-    //     playlistLink
-    // })
-
     if (isInGroup === null || isLoading) {
         return (
             <LoadingScreen />
@@ -133,7 +127,9 @@ export default function Group({ user, groupId }) {
         )
     }
     let bottom;
-    if (playlistLink === "") {
+    if (isGen) {
+        bottom = <MagicWand />
+    } else if (playlistLink === "") {
         bottom = <GeneratePlaylistForm 
                     user={user}
                     groupId={groupId}
@@ -146,8 +142,6 @@ export default function Group({ user, groupId }) {
                     refreshPlaylist={refreshPlaylist}
                     setIsGen={setIsGen}
                  />
-    } else if (isGen) {
-        bottom = <MagicWand />
     } else {
         bottom = <div className="w-full h-full flex flex-col lg:flex-row pb-20 lg:pl-32">
                     <GroupSidebar 
