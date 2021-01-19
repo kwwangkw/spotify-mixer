@@ -5,7 +5,7 @@ export default function ArtistCard({ artist, insertClassnames, insertClassnamesA
         return (
             <span className={`${insertClassnamesA} -mb-3 md:-mb-10 lg:mb-0`}>
                 <li className={`${insertClassnames} animate-pulse p-5 md:p-8 bg-gradient-to-br h-40 transform hover:scale-105 transition duration-400 ease-in-out rounded-2xl flex items-center text-3xl text-white`}>
-                    <div className="primary-600 -ml-2 md:-ml-4 mr-4 rounded-full" width="130px" height="130px" />
+                    <div className="primary-600 -ml-2 md:-ml-4 mr-4 rounded-full" />
                     <div className="truncate w-4/5 pl-1">
                     </div>
                 </li>

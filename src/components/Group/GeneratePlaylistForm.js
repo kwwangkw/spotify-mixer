@@ -88,7 +88,8 @@ export default function GeneratePlaylistForm({
                             setPlaylistID(playlist.id)
                             setPlaylistLink(playlist.external_urls.spotify)
                             refreshPlaylist(playlist.id)
-                            setTimeout(() => setIsGen(false), 2000)
+                            setIsGen(false)
+                            // setTimeout(() => setIsGen(false), 2000)
                         } catch(e) {
                             setIsGen(false)
                             if (["playlistName", "timeRange", "limitPerPerson"].includes(e)) {

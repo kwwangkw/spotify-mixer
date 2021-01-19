@@ -45,13 +45,13 @@ export default function Home({ user }) {
                 <h1 className="text-white text-4xl mb-3 text-center md:text-left">Personal Insights</h1>
                 <ul className="grid gap-4 grid-cols-1 md:gap-8">
                     <ul className="grid gap-4 grid-cols-1 lg:grid-cols-2 md:gap-8">
-                        <ArtistCard artist={artists[0]} insertClassnames="from-primary-200 to-primary-300" title="Your Top Artist" />
-                        <ArtistCard artist={artists[1]} insertClassnames="from-primary-300 to-primary-400" insertClassNamesA="invisible lg:visible" title="Your Runner Up Artist" />
+                        <ArtistCard artist={artists[0]} insertClassnames="from-primary-200 to-primary-300" title="Your Top Artist" insertClassnamesA="" />
+                        <ArtistCard artist={artists[1]} insertClassnames="from-primary-300 to-primary-400" insertClassnamesA="invisible lg:visible -mb-40 lg:mb-0" title="Your Runner Up Artist" />
                     </ul>
                     <ul className="grid gap-4 grid-cols-1 lg:grid-cols-3 md:gap-8">
-                        <SongCard track={tracks[0]} rank={1} insertClassnames="from-cyan-300 to-cyan-400" />
+                        <SongCard track={tracks[0]} rank={1} insertClassnames="-mb-44 lg:mb-0 from-cyan-300 to-cyan-400" />
                         <SongCard track={tracks[1]} rank={2} insertClassnames="from-cyan-400 to-cyan-500 invisible lg:visible" />
-                        <SongCard track={tracks[2]} rank={3} insertClassnames="from-cyan-500 to-cyan-400 invisible lg:visible" />
+                        <SongCard track={tracks[2]} rank={3} insertClassnames="from-cyan-500 to-cyan-400 invisible lg:visible"/>
                     </ul>
                 </ul>
             </div>
