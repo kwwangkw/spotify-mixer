@@ -12,3 +12,13 @@ Filter through a multitude of settings to create your perfect group playlist. Al
 This project is an iteration of the Spotify Mixer project.
 
 Contributors: Calvin Zheng, Hubert Hung, Kevin Wang, Richard Guan, Robert Buckley
+
+## Development after setup
+Within one terminal window, run the gatsby server:
+```bash
+/path/to/project/spotify-mixer$ yarn start
+```
+In another terminal, run the auth server:
+```bash
+/path/to/project/spotify-mixer-auth$ npm start
+```
