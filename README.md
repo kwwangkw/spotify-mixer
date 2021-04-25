@@ -1,5 +1,9 @@
 # spotify-mixer
-Welcome to our Winter 2021 Project: Spotify Mixer
+Welcome to our Project: Spotify Mixer
+
+Find the deployed site at: spotifymixer.com
+
+Make a playlist for you and your friends, full of everyone's favorite songs, with the click of a button.
 
 A web app for connecting with friends using audio as a social layer. Constructs Spotify playlists for groups by automatically detecting and adding each contributor's favorite tracks.
 
