@@ -1,7 +1,7 @@
 # spotify-mixer
 Welcome to our Project: Spotify Mixer
 
-Find the deployed site at: spotifymixer.com
+Find the deployed site at: https://spotifymixer.netlify.app/
 
 Make a playlist for you and your friends, full of everyone's favorite songs, with the click of a button.
 
